@@ -1,0 +1,79 @@
+1. Creating projects
+scrapy startproject myproject
+
+2. Creating new spider
+//templates list
+scrapy genspier -l
+
+eg. 
+C:\Users\baobao\myproject>scrapy genspider -l
+Available templates:
+  basic
+  crawl
+  csvfeed
+  xmlfeed
+
+//display template
+scrapy genspider -d basic
+
+eg.
+C:\Users\baobao\myproject>scrapy genspider -d basic
+# -*- coding: utf-8 -*-
+import scrapy
+
+class $classname(scrapy.Spider):
+    name = "$name"
+    allowed_domains = ["$domain"]
+    start_urls = (
+        'http://www.$domain/',
+    )
+
+    def parse(self, response):
+        pass
+
+//Creating 
+cd myproject
+scrapy genspider mydomain mydomain.com
+or
+scrapy genspider -t basic mydomain mydomain.com
+
+3. Crawl the spider
+scrapy crawl <spider>
+
+4. Check the spider
+scrapy check <spider>
+
+5. List the spider
+scrapy list
+
+6. Edit the spider
+scrapy edit <spider>
+or 
+use IDE to edit 
+
+7. Fetch the url
+scrapy fetch <url>
+
+eg.
+scrapy fetch --nolog http://www.example.com
+scrapy fetch --nolog --headers http://www.example.com
+
+8. View url in browser
+scrapy view <url>
+
+9. Debug the url
+scrapy shell <url>
+
+10. Parse the url
+scrapy parse <url>
+
+11. Get the setting
+scrapy settings 
+
+eg.
+scrapy settings --get BOT_NAME
+scrapy settings --get DOWNLOAD_DELAY
+
+12. Get the version
+scrapy version
+ 
