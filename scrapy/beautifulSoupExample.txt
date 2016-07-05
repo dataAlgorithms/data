@@ -1,0 +1,379 @@
+1. Install
+pip install beautifulsoup4
+or
+easy_install beautifulsoup4
+
+2. Use
+a. 简单版
+from urllib2 import urlopen
+from bs4 import BeautifulSoup
+
+html = urlopen("http://www.pythonscraping.com/exercises/exercise1.html")
+bsObj = BeautifulSoup(html.read())
+
+try:
+    title = bsObj.body.h1
+    print title
+except AttributeError as e:
+    print 'title is not exist!'
+
+//page source
+
+<html>
+<head>
+<title>A Useful Page</title>
+</head>
+<body>
+<h1>An Interesting Title</h1>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
+</body>
+</html>
+
+//输出
+<h1>An Interesting Title</h1>
+
+//说明 (下面的表达式 是等价的)
+bsObj.h1
+bsObj.html.body.h1
+bsObj.body.h1
+bsObj.html.h1
+
+b. find/findAll
+find(tag, attributes, recursive, text, keywords)
+findAll(tag, attributes, recursive, text, limit, keywords)
+
+实例:
+//源码
+
+<html>
+<head>
+<style>
+.green{
+	color:#55ff55;
+}
+.red{
+	color:#ff5555;
+}
+#text{
+	width:50%;
+}
+</style>
+</head>
+<body>
+<h1>War and Peace</h1>
+<h2>Chapter 1</h2>
+<div id="text">
+"<span class="red">Well, Prince, so Genoa and Lucca are now just family estates of the
+Buonapartes. But I warn you, if you don't tell me that this means war,
+if you still try to defend the infamies and horrors perpetrated by
+that Antichrist- I really believe he is Antichrist- I will have
+nothing more to do with you and you are no longer my friend, no longer
+my 'faithful slave,' as you call yourself! But how do you do? I see
+I have frightened you- sit down and tell me all the news.</span>"
+<p/>
+It was in July, 1805, and the speaker was the well-known <span class="green">Anna
+Pavlovna Scherer</span>, maid of honor and favorite of the <span class="green">Empress Marya
+Fedorovna</span>. With these words she greeted <span class="green">Prince Vasili Kuragin</span>, a man
+of high rank and importance, who was the first to arrive at her
+reception. <span class="green">Anna Pavlovna</span> had had a cough for some days. She was, as
+she said, suffering from la grippe; grippe being then a new word in
+<span class="green">St. Petersburg</span>, used only by the elite.
+<p/>
+All her invitations without exception, written in French, and
+delivered by a scarlet-liveried footman that morning, ran as follows:
+<p/>
+"<span class="red">If you have nothing better to do, Count [or Prince], and if the
+prospect of spending an evening with a poor invalid is not too
+terrible, I shall be very charmed to see you tonight between 7 and 10-
+Annette Scherer.</span>"
+<p/>
+...
+</div>
+</body>
+</html>
+
+实例b1:
+依据单个attributes, 获取指定标签内容
+
+# -*- coding: utf-8 -*-
+from bs4 import BeautifulSoup
+from urllib2 import urlopen
+
+html = urlopen("http://www.pythonscraping.com/pages/warandpeace.html") # 上面源码对应页面
+bsObj = BeautifulSoup(html)
+
+nameList = bsObj.findAll("span", {"class": "red"})
+for name in nameList:
+    print name.get_text()
+    
+//输出
+Well, Prince, so Genoa and Lucca are now just family estates of the
+Buonapartes. But I warn you, if you don't tell me that this means war,
+if you still try to defend the infamies and horrors perpetrated by
+that Antichrist- I really believe he is Antichrist- I will have
+nothing more to do with you and you are no longer my friend, no longer
+my 'faithful slave,' as you call yourself! But how do you do? I see
+I have frightened you- sit down and tell me all the news.
+...
+
+实例b2:
+依据tag, 获取所有head tag中的内容
+bsObj.findAll({"h1","h2","h3","h4","h5","h6"})
+
+//输出
+[<h1>War and Peace</h1>, <h2>Chapter 1</h2>]
+
+实例b3:
+依据多个attributes, 获取指定标签内容
+bsObj.findAll("span", {"class":"red", "class":"green"})
+
+//输出
+[<span class="green">Anna
+Pavlovna Scherer</span>, <span class="green">Empress Marya
+Fedorovna</span>, <span class="green">Prince Vasili Kuragin</span>, <span class="green">Anna Pavlovna</span>, <span class="green">St. Petersburg</span>, <span class="green">the prince</span>, <span class="green">Anna Pavlovna</span>, <span class="green">Anna Pavlovna</span>, <span class="green">the prince</span>, <span class="green">the prince</span>, <span class="green">the prince</span>, <span class="green">Prince Vasili</span>, <span class="green">Anna Pavlovna</span>, <span class="green">Anna Pavlovna</span>, <span class="green">the prince</span>, <span class="green">Wintzingerode</span>, <span class="green">King of Prussia</span>, <span class="green">le Vicomte de Mortemart</span>, <span class="green">Montmorencys</span>, <span class="green">Rohans</span>, <span class="green">Abbe Morio</span>, <span class="green">the Emperor</span>, <span class="green">the prince</span>, <span class="green">Prince Vasili</span>, <span class="green">Dowager Empress Marya Fedorovna</span>, <span class="green">the baron</span>, <span class="green">Anna Pavlovna</span>, <span class="green">the Empress</span>, <span class="green">the Empress</span>, <span class="green">Anna Pavlovna's</span>, <span class="green">Her Majesty</span>, <span class="green">Baron
+Funke</span>, <span class="green">The prince</span>, <span class="green">Anna
+Pavlovna</span>, <span class="green">the Empress</span>, <span class="green">The prince</span>, <span class="green">Anatole</span>, <span class="green">the prince</span>, <span class="green">The prince</span>, <span class="green">Anna
+Pavlovna</span>, <span class="green">Anna Pavlovna</span>]
+
+实例b4:
+依据文本内容 获取所有内容
+bsObj.findAll(text="the prince")
+
+//输出
+[u'the prince', u'the prince', u'the prince', u'the prince', u'the prince', u'the prince', u'the prince']
+
+实例b5:
+依据keywords, 获取所有内容
+bsObj.findAll(id="text")
+或者
+bsObj.findAll("", {"id":"text"})
+
+//输出
+[<div id="text">
+"<span class="red">I am your faithful slave and to you alone I can confess that my
+children are the bane of my life. It is the cross I have to bear. That
+is how I explain it to myself. It can't be helped!</span>"
+<p></p>
+He said no more, but expressed his resignation to cruel fate by a
+gesture. <span class="green">Anna Pavlovna</span> meditated.
+</div>]
+
+c.子类
+实例c1: 获取子类
+
+from urllib2 import urlopen
+from bs4 import BeautifulSoup
+
+html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+bsObj = BeautifulSoup(html)
+
+for child in bsObj.find("table", {"id":"giftList"}).children:
+    print child
+    
+//输出
+<tr><th>
+Item Title
+</th><th>
+Description
+</th><th>
+Cost
+</th><th>
+Image
+</th></tr>
+
+
+<tr class="gift" id="gift1"><td>
+Vegetable Basket
+</td><td>
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+<span class="excitingNote">Now with super-colorful bell peppers!</span>
+</td><td>
+$15.00
+</td><td>
+<img src="../img/gifts/img1.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift2"><td>
+Russian Nesting Dolls
+</td><td>
+Hand-painted by trained monkeys, these exquisite dolls are priceless! And by "priceless," we mean "extremely expensive"! <span class="excitingNote">8 entire dolls per set! Octuple the presents!</span>
+</td><td>
+$10,000.52
+</td><td>
+<img src="../img/gifts/img2.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift3"><td>
+Fish Painting
+</td><td>
+If something seems fishy about this painting, it's because it's a fish! <span class="excitingNote">Also hand-painted by trained monkeys!</span>
+</td><td>
+$10,005.00
+</td><td>
+<img src="../img/gifts/img3.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift4"><td>
+Dead Parrot
+</td><td>
+This is an ex-parrot! <span class="excitingNote">Or maybe he's only resting?</span>
+</td><td>
+$0.50
+</td><td>
+<img src="../img/gifts/img4.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift5"><td>
+Mystery Box
+</td><td>
+If you love suprises, this mystery box is for you! Do not place on light-colored surfaces. May cause oil staining. <span class="excitingNote">Keep your friends guessing!</span>
+</td><td>
+$1.50
+</td><td>
+<img src="../img/gifts/img6.jpg"/>
+</td></tr>
+
+d, 同类
+d1: 获取同级类别
+from urllib2 import urlopen
+from bs4 import BeautifulSoup
+
+html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+bsObj = BeautifulSoup(html)
+
+for sibling in bsObj.find("table", {"id":"giftList"}).tr.next_siblings:
+    print sibling
+    
+//输出
+<tr class="gift" id="gift1"><td>
+Vegetable Basket
+</td><td>
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+<span class="excitingNote">Now with super-colorful bell peppers!</span>
+</td><td>
+$15.00
+</td><td>
+<img src="../img/gifts/img1.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift2"><td>
+Russian Nesting Dolls
+</td><td>
+Hand-painted by trained monkeys, these exquisite dolls are priceless! And by "priceless," we mean "extremely expensive"! <span class="excitingNote">8 entire dolls per set! Octuple the presents!</span>
+</td><td>
+$10,000.52
+</td><td>
+<img src="../img/gifts/img2.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift3"><td>
+Fish Painting
+</td><td>
+If something seems fishy about this painting, it's because it's a fish! <span class="excitingNote">Also hand-painted by trained monkeys!</span>
+</td><td>
+$10,005.00
+</td><td>
+<img src="../img/gifts/img3.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift4"><td>
+Dead Parrot
+</td><td>
+This is an ex-parrot! <span class="excitingNote">Or maybe he's only resting?</span>
+</td><td>
+$0.50
+</td><td>
+<img src="../img/gifts/img4.jpg"/>
+</td></tr>
+
+
+<tr class="gift" id="gift5"><td>
+Mystery Box
+</td><td>
+If you love suprises, this mystery box is for you! Do not place on light-colored surfaces. May cause oil staining. <span class="excitingNote">Keep your friends guessing!</span>
+</td><td>
+$1.50
+</td><td>
+<img src="../img/gifts/img6.jpg"/>
+</td></tr>
+
+e, 父类
+实例e1: 获取父类
+from urllib2 import urlopen
+from bs4 import BeautifulSoup
+
+html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+bsObj = BeautifulSoup(html)
+
+for sibling in bsObj.find("img", {"src":"../img/gifts/img1.jpg"}).parent.previous_siblings:
+    print sibling
+    print ''
+    
+//输出
+<td>
+$15.00
+</td>
+
+<td>
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+<span class="excitingNote">Now with super-colorful bell peppers!</span>
+</td>
+
+<td>
+Vegetable Basket
+</td>
+
+f. 与正则表达式一起使用
+实例f1: 获取所有image的相对地址
+from urllib2 import urlopen
+from bs4 import BeautifulSoup
+import re
+
+html = urlopen("http://www.pythonscraping.com/pages/page3.html")
+bsObj = BeautifulSoup(html)
+
+images = bsObj.findAll("img", {"src": re.compile("\.\.\/img\/gifts/img.*\.jpg")})
+print images
+
+for image in images:
+    print image['src'] # or ,     print image.attrs["src"]
+    
+//输出
+[<img src="../img/gifts/img1.jpg"/>, <img src="../img/gifts/img2.jpg"/>, <img src="../img/gifts/img3.jpg"/>, <img src="../img/gifts/img4.jpg"/>, <img src="../img/gifts/img6.jpg"/>]
+../img/gifts/img1.jpg
+../img/gifts/img2.jpg
+../img/gifts/img3.jpg
+../img/gifts/img4.jpg
+../img/gifts/img6.jpg
+
+e, 与lambda一起使用
+实例e1: 找出所有含有两个attribute的标签
+print bsObj.findAll(lambda tag: len(tag.attrs) == 2)
+
+//输出
+[<img src="../img/gifts/logo.jpg" style="float:left;"/>, <tr class="gift" id="gift1"><td>
+Vegetable Basket
+</td><td>
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+<span class="excitingNote">Now with super-colorful bell peppers!</span>
+</td><td>
+$15.00
+</td><td>
+<img src="../img/gifts/img1.jpg"/>
+</td></tr>, <tr class="gift" id="gift2"><td>
+Russian Nesting Dolls
+</td><td>
+Hand-painted by trained monkeys, these exquisite dolls are priceless! And by "priceless," we mean "extremely expensive"! <span class="excitingNote">8 entire dolls per set! Octuple the presents!</span>
+</td><td>
+$10,000.52
+</td><td>
+]
