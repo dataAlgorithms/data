@@ -12,3 +12,6 @@ class MySpider(Spider):
 And pass the list of endpoints through the -a command line argument:
 
 scrapy crawl patents -a start_urls="US6249832,US20120095946" -o static/s.json
+
+2. crawl 100 pages 
+scrapy crawl -s CLOSESPIDER_PAGECOUNT=100 my_spider
