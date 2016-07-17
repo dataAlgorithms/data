@@ -101,6 +101,22 @@ class CommonSpider(CrawlSpider):
                 for i in sel.css(nk):
                     self.traversal(i, nv, item_class, item, items)
 
+    def traversal_xpath(self, sel, rules, item_class, item, items):
+        # print 'traversal:', sel, rules.keys()
+        if item is None:
+            item = item_class()
+        if '__use' in rules:
+            if '__list' in rules:
+                unique_item = item_class()
+                self.extract_items(sel, rules, unique_item)
+                items.append(unique_item)
+            else:
+                self.extract_items(sel, rules, item)
+        else:
+            for nk, nv in rules.items():
+                for i in sel.xpath(nk):
+                    self.traversal_xpath(i, nv, item_class, item, items)
+                    
     DEBUG=True
     def debug(self, sth):
         if self.DEBUG == True:
@@ -119,6 +135,19 @@ class CommonSpider(CrawlSpider):
             else:
                 item[k] = _items
 
+    def deal_text_xpath(self, sel, item, force_1_item, k, v):
+        if v.endswith('text()') and self.auto_join_text:
+            item[k] = ' '.join(self.extract_item(sel.xpath(v)))
+        else:
+            _items = self.extract_item(sel.xpath(v))
+            if force_1_item:
+                if len(_items) >= 1:
+                    item[k] = _items[0]
+                else:
+                    item[k] = ''
+            else:
+                item[k] = _items
+                
     keywords = set(['__use', '__list'])
     def traversal_dict(self, sel, rules, item_class, item, items, force_1_item):
         #import pdb; pdb.set_trace()
@@ -137,6 +166,24 @@ class CommonSpider(CrawlSpider):
                     #print(k, v)
                     self.traversal_dict(i, v, item_class, item, item[k], force_1_item)
         items.append(item)
+        
+    def traversal_dict_xpath(self, sel, rules, item_class, item, items, force_1_item):
+        #import pdb; pdb.set_trace()
+        item = {}
+        for k, v in rules.items():
+            if type(v) != dict:
+                if k in self.keywords:
+                    continue
+                if type(v) == list:
+                    continue
+                self.deal_text_xpath(sel, item, force_1_item, k, v)
+                #import pdb;pdb.set_trace()
+            else:
+                item[k] = []
+                for i in sel.xpath(k):
+                    #print(k, v)
+                    self.traversal_dict_xpath(i, v, item_class, item, item[k], force_1_item)
+        items.append(item)
 
     def dfs(self, sel, rules, item_class, force_1_item):
         if sel is None:
@@ -153,6 +200,21 @@ class CommonSpider(CrawlSpider):
     def parse_with_rules(self, response, rules, item_class, force_1_item=False):
         return self.dfs(Selector(response), rules, item_class, force_1_item)
 
+    def dfs_xpath(self, sel, rules, item_class, force_1_item):
+        if sel is None:
+            return []
+
+        items = []
+        if item_class != dict:
+            self.traversal_xpath(sel, rules, item_class, None, items)
+        else:
+            self.traversal_dict_xpath(sel, rules, item_class, None, items, force_1_item)
+
+        return items
+
+    def parse_with_rules_xpath(self, response, rules, item_class, force_1_item=False):
+        return self.dfs_xpath(Selector(response), rules, item_class, force_1_item)
+    
     ''' # use parse_with_rules example:
     def parse_people_with_rules(self, response):
         item = self.parse_with_rules(response, self.all_css_rules, ZhihuPeopleItem)
