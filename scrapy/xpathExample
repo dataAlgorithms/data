@@ -44,3 +44,28 @@ xpath('//*[@itemprop="price"][1]/text()').extract()
 9.Combine xpath and re 
 response.xpath('//*[@itemprop="price"][1]/text()').re('[.0-9]+')
 [u'334.39']
+
+10.Select first element of by analyzing following-siblings
+Requirement:
+<section>
+        <p id="ss_main">aa</p>
+        <p id="ss_main">bb</p>
+        <p id="main">cc</p>
+        <p id="main">dd</p>
+        <p id="main">ee</p>
+        <p id="ss_main">ff</p>
+        <p id="main">gg</p>
+        <p id="main">hh</p>
+        <p id="main">ii</p>
+        <p id="main">jj</p>
+        <p id="ss_main">xx</p>
+        <p id="ss_main">yy</p>
+        <p id="ss_main">zz</p>
+    </section>
+you can see consecutive <p> elements which attributes is staring from ss . 
+what I need is using xpath select the 1st <p> element of every group which attribute is starting from ss .
+
+SO in above xml  <p id="ss_main">aa</p> , <p id="ss_main">ff</p> ,  <p id="ss_main">xx</p> should be selected.
+
+Solution:
+//p[starts-with(@id, 'ss')][not(preceding-sibling::p[1][starts-with(@id, 'ss')])]
