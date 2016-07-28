@@ -69,3 +69,17 @@ SO in above xml  <p id="ss_main">aa</p> , <p id="ss_main">ff</p> ,  <p id="ss_ma
 
 Solution:
 //p[starts-with(@id, 'ss')][not(preceding-sibling::p[1][starts-with(@id, 'ss')])]
+
+11. Find sibling node after specified node is found
+Requirement:
+<t>
+    <n></n>
+    <k></k>
+    <m></m>
+    <k></k>
+</t>
+
+find k after m
+
+Soluation:
+//m[1]/following-sibling::k[1]
