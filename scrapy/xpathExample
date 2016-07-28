@@ -83,3 +83,50 @@ find k after m
 
 Soluation:
 //m[1]/following-sibling::k[1]
+
+12. xpath to get the first sibling
+Requirement:
+<div>
+<strong>Name: </strong> John Doe<br />
+<strong>Phone Number: </strong> 111-111-1111<br />
+<strong>Address: </strong> 111 Anywhere St.
+</div>
+
+Say that's my HTML. I can get the node whose value is "Name: " with
+"//strong[.='Name: ']", but how do I get " John Doe"? 
+
+Solution:
+In [13]: Selector(text=body).xpath("//strong[.='Name: ']/following-sibling::text()[1]").extract()
+Out[13]: [u' John Doe']
+
+13. get following sibling
+Requirement:
+<table>
+<tbody>
+<tr bgcolor="#AAAAAA">
+<tr>
+<tr>
+<tr>
+<tr>
+<tr>
+<tr>
+<tr>
+<td> Color Digest </td>
+<td> AgArAQICGQMVBBwTIRQHIwg0GUMURAZTBWQJcwV0AoEDAQ </td>
+</tr>
+<tr>
+<td> Color Digest </td>
+<td> 2,43,2,25,21,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, </td>
+</tr>
+</tbody>
+</table>
+
+I am trying to extract the Second "Color Digest" td element that has the decoded value.
+
+Solution:
+In [15]: Selector(text=body).xpath("//tr[td= ' Color Digest '][2]/td/following-sibling::td[1]").extract()
+Out[15]: [u'<td> 2,43,2,25,21,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,7,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,5,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0, </td>']
