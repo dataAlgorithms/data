@@ -187,6 +187,8 @@ I can do either of those with the preceding-sibling and the following-sibling ax
 
 Solution:
 //a/b[preceding-sibling::b/@property='p1' and following-sibling::b/@property='p2']
+or
+//b[@property='p1']/following-sibling::b[following::b[@property='p2']]
 
 Output:
 Out[27]: [u'<b>wvu</b>', u'<b>tsr</b>']
