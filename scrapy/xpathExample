@@ -246,3 +246,20 @@ Selector(text=body).xpath("//months/month[@name='February']/following-sibling::m
 
 Output:
 Out[71]: [u'<month name="March"></month>', u'<month name="April"></month>']
+
+18. XPath how to get parents sibling inside node
+from scrapy.selector import Selector
+
+body = """
+<tr>
+         <td bgcolor="ffffff" height="14" width="112"><p class="boldblack">&nbsp;Price:</p></td>
+         <td bgcolor="ffffff" width="296"><p class="cena2">9 000 $</p></td>
+         <td bgcolor="ffffff"></td>
+</tr>
+"""
+
+Selector(text=body).xpath('//tr[td[1]/p[contains(., "Price:")]]/td[2]/p/text()').extract()
+Selector(text=body).xpath('//tr/td/p[ends-with(., "$")]/text()').extract()   # not done
+
+Output:
+Out[79]: [u'9 000 $']
