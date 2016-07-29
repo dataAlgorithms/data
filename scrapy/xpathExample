@@ -229,3 +229,20 @@ Output:
 Im trying to find the first preceding-sibling of a node with OR condition.
 For example , i have a node A and i try to get the first preceding-sibling B but 
 if there is no B then get first preceding-siblingSPAN.
+
+17. following siding
+from scrapy.selector import Selector
+
+body = """
+ <months>
+  <month name="January"></month>
+  <month name="February"></month>
+  <month name="March"></month>
+  <month name="April"></month>
+</months>
+"""
+
+Selector(text=body).xpath("//months/month[@name='February']/following-sibling::month").extract()
+
+Output:
+Out[71]: [u'<month name="March"></month>', u'<month name="April"></month>']
