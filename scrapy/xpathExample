@@ -171,3 +171,22 @@ from all "preceding sibling nodes that have an id" the first one must have an id
 otherSolution:
 In [21]: Selector(text=body).xpath("//node[@id='1']/following-sibling::node[following::node[@id='2']]").extract()
 Out[21]: [u'<node></node>', u'<node></node>', u'<node></node>']
+
+15. combining-the-use-of-preceding-and-following-sibling-in-the-same-xpath-query
+
+Requirement:
+<a>
+    <b property="p1">zyx</b>
+    <b>wvu</b>
+    <b>tsr</b>
+    <b property="p2">qpo</b>
+    <b>qcs</b>
+</a>
+I want to select the nodes between the b node who has a property="p1" and the b node who has property="p2". 
+I can do either of those with the preceding-sibling and the following-sibling axis but I can't seem to find how to combine both.
+
+Solution:
+//a/b[preceding-sibling::b/@property='p1' and following-sibling::b/@property='p2']
+
+Output:
+Out[27]: [u'<b>wvu</b>', u'<b>tsr</b>']
