@@ -192,3 +192,40 @@ or
 
 Output:
 Out[27]: [u'<b>wvu</b>', u'<b>tsr</b>']
+
+16. xpath-sibling-condition-or
+
+Requirement:
+from scrapy.selector import Selector
+
+body = """
+<a>
+    <b property="p1">zyx</b>
+    <b>wvu</b>
+    <tr>tsr</tr>
+    <a property="p2">qpo</a>
+    <b>qcs1</b>
+</a>
+
+<a>
+    <b property="p1">zyx</b>
+    <b>wvu</b>
+    <span>tsr</span>
+    <a property="p2">qpo</a>
+    <b>qcs2</b>
+</a>
+"""
+
+In [70]: Selector(text=body).xpath("//a//preceding-sibling::*[name()='b' or name()='span'][1]").extract()
+
+Output:
+[u'<b property="p1">zyx</b>',
+ u'<b>wvu</b>',
+ u'<b>qcs1</b>',
+ u'<b property="p1">zyx</b>',
+ u'<b>wvu</b>',
+ u'<span>tsr</span>']
+ 
+Im trying to find the first preceding-sibling of a node with OR condition.
+For example , i have a node A and i try to get the first preceding-sibling B but 
+if there is no B then get first preceding-siblingSPAN.
