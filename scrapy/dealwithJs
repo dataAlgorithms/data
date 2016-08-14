@@ -12,3 +12,5 @@ to reference arbitrary Python objects and functions in the JavaScript VM
 spynner - Spynner is a stateful programmatic web browser module for Python.
 It is based upon PyQT and WebKit. It supports Javascript, AJAX, and every other technology that !WebKit is able to handle (Flash, SVG, ...). Spynner takes advantage of JQuery. 
 a powerful Javascript library that makes the interaction with pages and event simulation really easy
+
+http://stackoverflow.com/questions/34968262/follow-each-link-of-a-page-and-scrape-content-scrapy-selenium/34968455
