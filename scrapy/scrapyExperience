@@ -19,4 +19,18 @@ scrapy crawl -s CLOSESPIDER_PAGECOUNT=100 my_spider
 3. Website forces scrapy redirect
 http://stackoverflow.com/questions/39132733/website-forces-scrapy-redirect
 
+4. headless-browser-and-scraping-solutions
+http://stackoverflow.com/questions/18539491/headless-browser-and-scraping-solutions
+
+5. cannot-install-lxml-on-mac-os-x-10-9
+http://stackoverflow.com/questions/19548011/cannot-install-lxml-on-mac-os-x-10-9
+
+6. can-scrapy-be-used-to-scrape-dynamic-content-from-websites-that-are-using-ajax
+http://stackoverflow.com/questions/8550114/can-scrapy-be-used-to-scrape-dynamic-content-from-websites-that-are-using-ajax
+
+7. oserror-errno-1-operation-not-permitted-when-installing-scrapy-in-osx-10-11
+http://stackoverflow.com/questions/31900008/oserror-errno-1-operation-not-permitted-when-installing-scrapy-in-osx-10-11
+
+8. difference-between-beautifulsoup-and-scrapy-crawler
+http://stackoverflow.com/questions/19687421/difference-between-beautifulsoup-and-scrapy-crawler
 
