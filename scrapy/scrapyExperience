@@ -73,5 +73,29 @@ http://stackoverflow.com/questions/9334522/scrapy-follow-link-to-get-additional-
 21. scrapy-how-to-manage-cookies-sessions
 http://stackoverflow.com/questions/4981440/scrapy-how-to-manage-cookies-sessions
 
+22. how-to-give-delay-between-each-requests-in-scrapy
+http://stackoverflow.com/questions/8768439/how-to-give-delay-between-each-requests-in-scrapy
+
+23. crawling-with-an-authenticated-session-in-scrapy
+http://stackoverflow.com/questions/5851213/crawling-with-an-authenticated-session-in-scrapy
+
+24. selenium-with-scrapy-for-dynamic-page
+http://stackoverflow.com/questions/17975471/selenium-with-scrapy-for-dynamic-page
+
+25. how-to-use-crawlspider-from-scrapy-to-click-a-link-with-javascript-onclick
+http://stackoverflow.com/questions/2454998/how-to-use-crawlspider-from-scrapy-to-click-a-link-with-javascript-onclick
+
+26. python-no-module-named-service-identity
+http://stackoverflow.com/questions/24089484/python-no-module-named-service-identity
+
+27. force-my-scrapy-spider-to-stop-crawling
+http://stackoverflow.com/questions/4448724/force-my-scrapy-spider-to-stop-crawling
+
+28. Scrapy - parse a page to extract items - then follow and store item url contents
+http://stackoverflow.com/questions/5825880/scrapy-parse-a-page-to-extract-items-then-follow-and-store-item-url-contents
+
+29. scrapy: Call a function when a spider quits
+http://stackoverflow.com/questions/12394184/scrapy-call-a-function-when-a-spider-quits
+
 
 
