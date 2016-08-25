@@ -15,3 +15,8 @@ scrapy crawl patents -a start_urls="US6249832,US20120095946" -o static/s.json
 
 2. crawl 100 pages 
 scrapy crawl -s CLOSESPIDER_PAGECOUNT=100 my_spider
+
+3. Website forces scrapy redirect
+http://stackoverflow.com/questions/39132733/website-forces-scrapy-redirect
+
+
