@@ -30,7 +30,7 @@ class StackOverflowSpider(scrapy.Spider):
             full_url = response.urljoin(href.extract())         
             yield scrapy.Request(full_url, callback=self.parse_question)
             
-        next_page = response.xpath('//a[@rel="next1"]/@href')
+        next_page = response.xpath('//a[@rel="next"]/@href')
         if next_page:
             next_url = response.urljoin(next_page.extract()[0])
             yield scrapy.Request(next_url, callback=self.parse)
