@@ -1,0 +1,13 @@
+1. zhihu
+
+zhihu 内容以ajax方式加载的处理
+
+2. tmall
+
+tmall 商品详细信息中价格以class=[css函数]
+
+eg. 
+<li class="tm-ind-item tm-ind-sellCount " data-label="月销量"></li>
+
+对应页面:
+https://detail.tmall.com/item.htm?spm=a1z10.1-b.w4004-3112900571.2.ve7KJd&id=10910218037
