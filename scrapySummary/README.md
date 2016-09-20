@@ -34,3 +34,10 @@ including CrawerSpider(restrict_xpath)
           Avoid ban way(agent)
           xpath(contain chinese)
           chinese item print
+
+//Nos spider
+
+including daterange, 
+          start_urls building,
+          pass item to callback,
+          remove \t\n\r and space of item value
