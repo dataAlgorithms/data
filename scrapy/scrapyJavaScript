@@ -1,0 +1,7 @@
+Scrapy Doesn't support java script call by itself. But there are a couple of mechanisms that you can use for facing java-script.
+
+Splash - Splash is a javascript rendering service with an HTTP API. It's a lightweight browser with an HTTP API, implemented in Python using Twisted and QT
+Scrapyjs - This library provides Scrapy-Javascript integration through two different mechanisms: a Scrapy download handler, a Scrapy downloader middlware
+SpiderMonkey - Execute arbitrary JavaScript code from Python. Allows you to reference arbitrary Python objects and functions in the JavaScript VM
+spynner - Spynner is a stateful programmatic web browser module for Python. It is based upon PyQT and WebKit. It supports Javascript, AJAX, and every other technology that !WebKit is able to handle (Flash, SVG, ...). 
+    Spynner takes advantage of JQuery. a powerful Javascript library that makes the interaction with pages and event simulation really easy
