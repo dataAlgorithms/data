@@ -41,3 +41,9 @@ including daterange,
           start_urls building,
           pass item to callback,
           remove \t\n\r and space of item value
+
+//Qutoes spider
+
+including page element at every main page,
+          href at every main page,
+          spider argument
