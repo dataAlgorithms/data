@@ -1,0 +1,47 @@
+1. browser automatic tests suits and headless browser platforms capable of scraping.
+
+BROWSER TESTING / SCRAPING:
+Selenium - polyglot flagship in browser automation, bindings for Python, Ruby, JavaScript, C#, Haskell and more, 
+IDE for Firefox (as an extension) for faster test deployment. Can act as a Server and has tons of features.
+
+JavaScript:
+PhantomJS - JavaScript, headless testing with screen capture and automation, uses Webkit. 
+As of version 1.8 Selenium's WebDriver API is implemented,
+ so you can use any WebDriver binding and tests will be compatible with Selenium
+SlimerJS - similar to PhantomJS, uses Gecko (Firefox) instead of WebKit
+CasperJS - JavaScript, build on both PhantomJS and SlimerJS, has extra features
+Ghost Driver - JavaScript implementation of the WebDriver Wire Protocol for PhantomJS.
+new PhantomCSS - CSS regression testing. A CasperJS module for automating visual regression
+ testing with PhantomJS and Resemble.js.
+new WebdriverCSS - plugin for Webdriver.io for automating visual regression testing
+new PhantomFlow - Describe and visualize user flows through tests. An experimental 
+approach to Web user interface testing.
+new trifleJS - ports the PhantomJS API to use the Internet Explorer engine.
+new CasperJS IDE (commercial)
+
+NODE.JS
+Node-phantom - bridges the gap between PhantomJS and node.js
+WebDriverJs - Selenium WebDriver bindings for node.js by Selenium Team
+WD.js - node module for WebDriver/Selenium 2
+yiewd - WD.js wrapper using latest Harmony generators! Get rid of the callback pyramid with yield
+ZombieJs - Insanely fast, headless full-stack testing using node.js
+NightwatchJs - Node JS based testing solution using Selenium Webdriver
+Chimera - Chimera: can do everything what phantomJS does, but in a full JS environment
+Dalek.js - Automated cross browser testing with JavaScript through Selenium Webdriver
+Webdriver.io - better implementation of WebDriver bindings with predefined 50+ actions
+Nightmare - Electron bridge with a high-level API.
+jsdom - Tailored towards web scraping. A very lightweight DOM implemented in Node.js, it supports pages with javascript.
+
+WEB SCRAPING / MINING
+Scrapy - Python, mainly a scraper/miner - fast, well documented and, can be linked with Django Dynamic Scraper for nice mining deployments,
+ or Scrapy Cloud for PaaS (server-less) deployment, works in terminal or an server stand-alone proces, can be used with Celery, built on top of Twisted
+Snailer - node.js module, untested yet.
+Node-Crawler - node.js module, untested yet.
+
+ONLINE TOOLS
+new Online HTTP client - Dedicated SO answer
+dead CasperBox - Run CasperJS scripts online
+
+RELATED LINKS & RESOURCES
+Comparsion of Webscraping software
+new Resemble.js : Image analysis and comparison
