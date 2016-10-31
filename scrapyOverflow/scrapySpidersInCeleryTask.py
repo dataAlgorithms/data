@@ -25,3 +25,8 @@ def run_spider(url):
     crawler = UrlCrawlerScript(spider)
     crawler.start()
     crawler.join()
+
+        
+'''
+http://stackoverflow.com/questions/22116493/run-a-scrapy-spider-in-a-celery-task
+'''
