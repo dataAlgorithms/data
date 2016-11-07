@@ -1,0 +1,75 @@
+//简单分析scrapy的cookies
+查看scrapy与cookies有关的源码，在http/cookies.py文件中，下面是部分代码：
+
+import time
+from cookielib import CookieJar as _CookieJar, DefaultCookiePolicy, IPV4_RE
+from scrapy.utils.httpobj import urlparse_cached
+
+class CookieJar(object):
+    def __init__(self, policy=None, check_expired_frequency=10000):
+        self.policy = policy or DefaultCookiePolicy()
+        self.jar = _CookieJar(self.policy)
+        self.jar._cookies_lock = _DummyLock()
+        self.check_expired_frequency = check_expired_frequency
+        self.processed = 0
+    
+    def extract_cookies(self, response, request):
+        wreq = WrappedRequest(request)
+        wrsp = WrappedResponse(response)
+        return self.jar.extract_cookies(wrsp, wreq)
+    
+    @property
+    def _cookies(self):
+        return self.jar._cookies
+
+    def set_cookie(self, cookie):
+        self.jar.set_cookie(cookie)
+可以看出scrapy的CookieJar类基本上是通过cookielib的CookieJar类来实现的相应功能。
+
+//获取cookies
+将meta的cookie_jar设置为CookieJar对象，通过response.meta['cookie_jar']即可获得cookies的内容。
+
+from scrapy.http.cookies import CookieJar
+
+cookie_jar = CookieJar()
+return [scrapy.FormRequest(url="http://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.15)",
+                           formdata=self.login_data,
+                           meta = {'dont_merge_cookies': True, 'cookiejar': cookie_jar},#首次请求
+                           callback=self.after_post)]
+
+......
+//#之后的每次请求通过传递这个CookieJar对象
+yield scrapy.Request(login_url, meta = {'dont_merge_cookies': True, 'cookiejar' : response.meta['cookiejar']}, callback=self.verify_login)
+
+......
+//#登录成功后，得到要保存的cookies，为CookieJar对象
+cookie_jar = response.meta['cookiejar']
+cookie_jar.extract_cookies(response, response.request)
+
+//将cookies存储到文件
+可以通过CookieJar._cookies方法将cookies转换为字典类型进行存储，也可以通过遍历的方式将各条cookies分别存储，为了后续解析的简单，我选择了遍历的方式：
+
+with open(self.cookie_file, 'wb+') as f:
+    for cookie in cookie_jar:
+        f.write(str(cookie) + '\n')
+这种方式相比直接存储为字典格式的方式而言，遍历后自动忽略了一部分cookies，数量相比后者有明显减少，但分析后发现，
+关于最后一次请求也就是登录成功时的请求的cookies都被保存了下来，没有被忽略，如果不放心，完全可以直接解析完整的字典类型的cookies。保存下来的cookies格式如：
+
+<Cookie SRF=1456586813 for .passport.weibo.com/>
+......
+<Cookie SSOLoginState=1456586813 for .weibo.com/>
+
+//从文件加载cookies
+通过FireFox分析微博登录成功时的请求返回的cookies以及这篇博客可知，用于登录的cookies的domain都是.weibo.com，那么可以通过正则表达式从文件中提取相关的cookies：
+
+with open(self.cookie_file) as f:
+    cookiejar = f.read()
+    
+p = re.compile('\<Cookie (.*?) for .weibo.com\/\>')
+cookies = re.findall(p, cookiejar)
+cookies = (cookie.split('=') for cookie in cookies)
+cookie_jar = dict(cookies)
+这里之所以将读取的cookies转换为字典类型，是因为若要在scrapy的请求中手动添加cookies，需要使用scrapy.Request方法中的cookies参数。
+将从文件中加载的字典类型的cookie_jar赋值给cookies参数，可以实现直接登录微博：
+
+yield scrapy.Request(url='http://weibo.com', cookies=cookie_jar, callback=self.logined)
