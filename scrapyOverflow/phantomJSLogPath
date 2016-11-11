@@ -1,0 +1,1 @@
+driver = webdriver.PhantomJS(service_log_path='/var/log/phantomjs/ghostdriver.log')
