@@ -1,0 +1,17 @@
+1. Method One (Exception)
+from scrapy.exceptions import CloseSpider
+
+def parse_page(self, response):
+  if 'Bandwidth exceeded' in response.body:
+    raise CloseSpider('bandwidth_exceeded')
+
+2. Method Two (Pipeline and Exception)
+pipeline:
+def process_item(self, item, spider):
+    if some_flag:
+        spider.close_down = True
+
+spider:
+def parse(self, response):
+    if self.close_down:
+        raise CloseSpider(reason='API usage exceeded')
