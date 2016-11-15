@@ -1,0 +1,158 @@
+scrapy: Call a function when a spider quits
+
+Is there a way to trigger a method in a Spider class just before it terminates?
+
+//Method One
+import scrapy
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
+
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+
+    start_urls = [
+        'http://quotes.toscrape.com/page/1/',
+    ]
+
+    def __init__(self):
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
+        
+    def parse(self, response):
+        for quote in response.css('div.quote'):
+            yield {
+                'text': quote.css('span.text::text').extract_first(),
+                'author': quote.css('span small::text').extract_first(),
+                'tags': quote.css('div.tags a.tag::text').extract(),
+           }
+
+        next_page = response.css('li.next a::attr(href)').extract_first()
+        if next_page is not None:
+            print 'next_page:',next_page
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+            
+    def spider_closed(self, spider):
+        print 'spider closed!'
+        
+//Method Two
+import scrapy
+from scrapy.signalmanager import SignalManager
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy import signals
+
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+
+    start_urls = [
+        'http://quotes.toscrape.com/page/1/',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        super(QuotesSpider, self).__init__(*args, **kwargs)
+        SignalManager(dispatcher.Any).connect(
+            self.closed_handler, signal=signals.spider_closed)
+        
+    def parse(self, response):
+        for quote in response.css('div.quote'):
+            yield {
+                'text': quote.css('span.text::text').extract_first(),
+                'author': quote.css('span small::text').extract_first(),
+                'tags': quote.css('div.tags a.tag::text').extract(),
+           }
+
+        next_page = response.css('li.next a::attr(href)').extract_first()
+        if next_page is not None:
+            print 'next_page:',next_page
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+            
+    def closed_handler(self, spider):
+        print 'close spider!'
+        
+//Method Three
+
+import scrapy
+from scrapy import signals
+
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+
+    start_urls = [
+        'http://quotes.toscrape.com/page/1/',
+    ]
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(QuotesSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_opened, signals.spider_opened)
+        crawler.signals.connect(spider.spider_closed, signals.spider_closed)
+        return spider
+        
+    def parse(self, response):
+        for quote in response.css('div.quote'):
+            yield {
+                'text': quote.css('span.text::text').extract_first(),
+                'author': quote.css('span small::text').extract_first(),
+                'tags': quote.css('div.tags a.tag::text').extract(),
+           }
+
+        next_page = response.css('li.next a::attr(href)').extract_first()
+        if next_page is not None:
+            print 'next_page:',next_page
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+            
+    def spider_opened(self, spider):
+        print('Opening {} spider'.format(spider.name))
+
+    def spider_closed(self, spider):
+        print('Closing {} spider'.format(spider.name))
+        
+//Method Four
+#! coding=utf-8
+
+import scrapy
+from scrapy import signals
+from tqdm import tqdm
+
+class QuotesSpider(scrapy.Spider):
+    name = "quotes"
+
+    start_urls = [
+        'http://quotes.toscrape.com/page/1/',
+    ]
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(QuotesSpider, cls).from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider.spider_opened, signals.spider_opened)
+        crawler.signals.connect(spider.spider_closed, signals.spider_closed)
+        return spider
+        
+    def parse(self, response):
+        for quote in response.css('div.quote'):
+            yield {
+                'text': quote.css('span.text::text').extract_first(),
+                'author': quote.css('span small::text').extract_first(),
+                'tags': quote.css('div.tags a.tag::text').extract(),
+           }
+
+        next_page = response.css('li.next a::attr(href)').extract_first()
+        if next_page is not None:
+            print 'next_page:',next_page
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
+            
+    def spider_opened(self, spider):
+        self.pbar = tqdm()  # initialize progress bar
+        self.pbar.clear()
+        self.pbar.write('Opening {} spider'.format(spider.name))
+
+    def spider_closed(self, spider):
+        self.pbar.clear()
+        self.pbar.write('Closing {} spider'.format(spider.name))
+        self.pbar.close()  # close progress bar
+        
+        
+        
+        
