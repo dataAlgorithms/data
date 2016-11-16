@@ -1,0 +1,88 @@
+1. Multi Post with Pure Python
+def mulPostWithPy():
+    
+    import requests 
+    
+    form1 = {"energy_category": "electricity",
+             "location": "home",
+             "location-home": "shift",
+             "distributor": "7",
+             "postcode": "3000",
+             "energy_concession": "0",
+             "solar": "0",
+             "disclaimer_chkbox": "disclaimer_selected",
+             }
+    
+    
+    form2 = {"person-count":"1",
+    "room-count":"4",
+    "refrigerator-count":"0",
+    "gas-type":"3",
+    "pool-heating":"0",
+    "spaceheating[]":"none",
+    "spacecooling[]":"none",
+    "cloth-dryer":"0",
+    "waterheating[]":"other"}
+    
+    sub_url = "https://compare.switchon.vic.gov.au/submit"
+    
+    with requests.Session() as s:
+        s.post(sub_url, data=form1)
+        r = (s.get("https://compare.switchon.vic.gov.au/energy_questionnaire"))
+        s.post("https://compare.switchon.vic.gov.au/energy_questionnaire/submit",
+               data=form2)
+        r = s.get("https://compare.switchon.vic.gov.au/offers")
+        js = s.get("https://compare.switchon.vic.gov.au/service/offers").json()["offersList"]
+        by_discount = sorted(js, key=lambda d: d["offerDetails"][0]["fullDiscountedPrice"])
+        print(r.content)
+        print by_discount
+        
+if __name__ == "__main__":
+    mulPostWithPy()
+
+2. Multi Post with Scrapy
+import scrapy
+
+class Spider(scrapy.Spider):
+    name = 'comp'
+    start_urls = ['https://compare.switchon.vic.gov.au/energy_questionnaire/submit']
+
+    def __init__(self):
+        self.form1 = {"energy_category": "electricity",
+                      "location": "home",
+                     "location-home": "shift",
+                     "distributor": "7",
+                     "postcode": "3000",
+                     "energy_concession": "0",
+                     "solar": "0",
+                     "disclaimer_chkbox": "disclaimer_selected",
+        }
+
+        self.sub_url = "https://compare.switchon.vic.gov.au/submit"
+        self.form2 = {"person-count":"1",
+                      "room-count":"4",
+                      "refrigerator-count":"0",
+                      "gas-type":"3",
+                      "pool-heating":"0",
+                      "spaceheating[]":"none",
+                      "spacecooling[]":"none",
+                      "cloth-dryer":"0",
+                      "waterheating[]":"other"
+        }
+
+    def start_requests(self):
+        return [scrapy.FormRequest(
+            self.sub_url,
+            formdata=self.form1,
+            callback=self.parse
+        )]
+
+    def parse(self, response):
+        return scrapy.FormRequest.from_response(
+            response,
+            formdata=self.form2,
+            callback=self.after
+        )
+
+    def after(self, response):
+        print("<h1>Your electricity offers</h1>" in response.body)
