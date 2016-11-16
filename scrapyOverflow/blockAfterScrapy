@@ -1,0 +1,50 @@
+Problem:
+    After the scraping is done, the script's running is blocked.
+
+Script:
+    crawler = Crawler(Settings(settings))
+    crawler.configure()
+    spider = crawler.spiders.create(spider_name)
+    crawler.crawl(spider)
+    crawler.start()
+    log.start()
+    reactor.run()
+    print "It can't be printed out!"
+
+Solution:
+
+from twisted.internet import reactor
+
+from scrapy import log, signals
+from scrapy.crawler import Crawler
+from scrapy.settings import Settings
+from scrapy.xlib.pydispatch import dispatcher
+
+from testspiders.spiders.followall import FollowAllSpider
+
+def stop_reactor():
+    reactor.stop()
+
+dispatcher.connect(stop_reactor, signal=signals.spider_closed)
+spider = FollowAllSpider(domain='scrapinghub.com')
+crawler = Crawler(Settings())
+crawler.configure()
+crawler.crawl(spider)
+crawler.start()
+log.start()
+log.msg('Running reactor...')
+reactor.run()  # the script will block here until the spider is closed
+log.msg('Reactor stopped.')
+And the command line log output might look something like:
+
+stav@maia:/srv/scrapy/testspiders$ ./api
+2013-02-10 14:49:38-0600 [scrapy] INFO: Running reactor...
+2013-02-10 14:49:47-0600 [followall] INFO: Closing spider (finished)
+2013-02-10 14:49:47-0600 [followall] INFO: Dumping Scrapy stats:
+    {'downloader/request_bytes': 23934,...}
+2013-02-10 14:49:47-0600 [followall] INFO: Spider closed (finished)
+2013-02-10 14:49:47-0600 [scrapy] INFO: Reactor stopped.
+stav@maia:/srv/scrapy/testspiders$
+
+TipFrom:
+http://stackoverflow.com/questions/14777910/scrapy-crawl-from-script-always-blocks-script-execution-after-scraping
