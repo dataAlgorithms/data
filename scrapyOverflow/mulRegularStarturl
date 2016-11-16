@@ -1,0 +1,14 @@
+Problem: 
+
+How can we scrapy such follow urls?
+Pages are as follow.
+
+example.com/foo/bar/page_1.html
+example.com/foo/bar/page_2.html
+example.com/foo/bar/page_3.html
+...
+example.com/foo/bar/page_54.html
+
+Solution:
+class MySpider(BaseSpider):
+    start_urls = ['http://example.com/foo/bar/page_%s.html' % page for page in xrange(1,54)]
