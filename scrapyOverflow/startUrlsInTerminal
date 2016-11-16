@@ -1,0 +1,27 @@
+1. Pass start_urls through terminal (single url)
+class MySpider(BaseSpider):
+
+    name = 'my_spider'    
+
+    def __init__(self, *args, **kwargs): 
+      super(MySpider, self).__init__(*args, **kwargs) 
+
+      self.start_urls = [kwargs.get('start_url')] 
+
+Start it like:
+   scrapy crawl my_spider -a start_url="http://some_url"
+
+2. Pass start_urls through terminal (multi url)
+class MySpider(BaseSpider):
+
+    name = 'my_spider'    
+
+    def __init__(self, *args, **kwargs): 
+      super(MySpider, self).__init__(*args, **kwargs) 
+      self.start_urls = kwargs.pop('start_urls').split(',')
+
+Start it like:
+   scrapy crawl my_spider -a start_urls="http://example1.com,http://example2.com"
+
+TipFrom:
+    http://stackoverflow.com/questions/9681114/how-to-give-url-to-scrapy-for-crawling
