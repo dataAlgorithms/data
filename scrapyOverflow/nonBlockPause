@@ -1,0 +1,48 @@
+# Method One (Inner function)
+
+class ScrapySpider(Spider):
+    name = 'live_function'
+
+    def start_requests(self):
+        yield Request('some url', callback=self.non_stop_function)
+
+    def non_stop_function(self, response):
+
+        parse_and_pause = Deferred()  # changed
+        parse_and_pause.addCallback(self.second_parse_function) # changed
+        parse_and_pause.addCallback(pause, seconds=10)  # changed
+
+        for url in ['url1', 'url2', 'url3', 'more urls']:
+            yield Request(url, callback=parse_and_pause)  # changed
+
+        yield Request('some url', callback=self.non_stop_function)  # Call itself
+
+    def second_parse_function(self, response):
+        pass
+
+# Method Two (Call outer function)
+def get_perform_and_pause_deferred(seconds, fn, *args, **kwargs):
+    d = Deferred()
+    d.addCallback(fn, *args, **kwargs)
+    d.addCallback(pause, seconds=seconds)
+    return d
+And here is possible usage:
+
+class ScrapySpider(Spider):
+    name = 'live_function'
+
+    def start_requests(self):
+        yield Request('some url', callback=self.non_stop_function)
+
+    def non_stop_function(self, response):
+        for url in ['url1', 'url2', 'url3', 'more urls']:
+            # changed
+            yield Request(url, callback=get_perform_and_pause_deferred(10, self.second_parse_function))
+
+        yield Request('some url', callback=self.non_stop_function)  # Call itself
+
+    def second_parse_function(self, response):
+        pass
+
+TipUrl:
+http://stackoverflow.com/questions/36984696/scrapy-non-blocking-pause
