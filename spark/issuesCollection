@@ -1,0 +1,7 @@
+1. pyspark ImportError: cannot import name accumulators
+Solution:
+~/spark/spark/python/pyspark/context.py,
+the file which was causing the error:
+comment it
+# from pyspark import accumulators
+from pyspark.accumulators import Accumulator
