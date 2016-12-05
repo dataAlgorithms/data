@@ -1,1 +1,46 @@
-http://blog.csdn.net/zistxym/article/details/42918339
+docker install at Windows7(64)
+
+0. 安装前提
+docker只能安装在64位系统上
+我们的系统是win7
+
+1. 下载程序包
+https://github.com/boot2docker/windows-installer/releases
+
+下载最新版本的：docker-install.exe即可。
+
+2. 设置环境变量
+将C:\Program Files (x86)\Git\bin路径加入到系统PATH
+
+在cmd中输入ls如果能命令执行正常说明环境添加正确
+
+3. 启动docker
+切到docker的安装目录
+修改start.sh： 添加HOME="c:\Users\baobao"
+
+然后在cmd后输入sh start.sh
+
+第一次启动中，如果有新版本会更新，时间比较长。
+如果第二次启动，就非常快了。 
+
+执行ifconfig获取到ip为192.168.59.103 （login: docker/tcuser)
+
+4. 下载putty
+登录到docker (host:192.168.59.103 user:docker password:tcuser)
+
+5. 下载ubuntu镜像
+http://download.openvz.org/template/precreated 
+选择下载 ubuntu-14.04-x86_64.tar.gz
+
+下载pscp并且上传ubuantu镜像
+pscp.exe ubuntu-14.04-x86_64.tar.gz docker@192.168.59.103:/home/docker
+密码： tcuser
+
+6. docker上安装ubuntu并且运行
+cd /home/docker
+cat ubuntu-14.04-x86_64.tar.gz |docker import - ubuntu:ubuntu14 
+docker images (查看）
+docker run -i -t ubuntu:ubuntu14 /bin/bash （运行）
+
+ 
+参考： http://blog.csdn.net/zistxym/article/details/42918339
