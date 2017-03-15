@@ -1,0 +1,17 @@
+1. RDD Basics
+a. Creating an RDD of strings with textFile() in Python
+lines = sc.textFile("README.md")
+b. Calling the filter() transformation
+pythonLines = lines.filter(lambda line: "Python" in line)
+c. Calling the first() action
+pythonLines.first()
+pythonLines.count()
+d. Persisting an RDD in memory
+pythonLines.persist # cache() is the same as calling persist() with the default storage level
+
+In summarize, every Spark program and shell session will work as follow
+e1: Create some input RDDs from external data
+e2: Transfrom them to define new RDDs using transformations like filter()
+e3: Ask Spark to persist() any intermediate RDDs that will need to be reused
+e4: Launch actions such as count() and first() to kick off a parallel computation,
+    which is then optimized and executed by Spark
