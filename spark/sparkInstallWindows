@@ -1,1 +1,19 @@
+1. install
 https://ysinjab.com/2015/03/28/hello-spark/
+
+2. set ipython for spark
+http://ramhiser.com/2015/02/01/configuring-ipython-notebook-support-for-pyspark/
+
+3. direct use spark in python
+http://stackoverflow.com/questions/29783520/create-pyspark-profile-for-ipython
+
+'''
+$ pip install findspark
+And then, inside a notebook:
+
+import findspark
+findspark.init()
+
+import pyspark
+sc = pyspark.SparkContext(appName="myAppName")
+'''
