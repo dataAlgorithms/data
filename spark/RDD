@@ -18,7 +18,7 @@ e4: Launch actions such as count() and first() to kick off a parallel computatio
     
 2. RDD Creating
 Two way to Creating RDDS
-1. Take an existing collection and pass to parallelize
+a. Take an existing collection and pass to parallelize
 //Python
 lines = sc.parallelize(["pandas", "i like pandas"])
 //Scala
@@ -26,10 +26,40 @@ val lines = sc.parallelize(List("pandas", "i like pandas"))
 //Java
 JavaRDD<String> lines = sc.parallelize(Arrays.asList("pandas", "i like pandas"));
 
-2. Load data from external storage, eg. textFile()
+b. Load data from external storage, eg. textFile()
 //Python
 lines = sc.textFile("e:\\spark\\README.md") 
 //Scala
 val lines = sc.textFile("e:\\spark\\README.md")
 //Java
 JavaRDD<String> lines = sc.textFile("e:\\spark\\README.md");
+
+3. RDD Operations (transformations and actions)
+Transformations are operations on RDD that return new RDD, such as map() and filter()
+Actions are operatioins that return a result to the driver program or write to storage
+ and kick off a computation, such as count() and first()
+
+Transformation return RDD, actions return some other data type
+
+a. Transformation
+//Python
+inputRDD = sc.textFile("e:\\spark\\log.txt")
+errorsRDD = inputRDD.filter(lambda x: "error" in x)
+warnsRDD = inputRDD.filter(lambda x: "warn" in x)
+badLinesRDD = errorsRDD.union(warnsRDD)
+//Scala
+val inputRDD = sc.textFile("e:\\spark\\log.txt")
+val errorsRDD = inputRDD.filter(line => line.contains("error"))
+val warnsRDD = inputRDD.filter(line => line.contains("warn"))
+val badLinesRDD = errorsRDD.union(warnsRDD)
+
+b. Action
+//Python
+print "Input had " + "%s" % badLinesRDD.count() + " concerning lines"
+print "Here are 2 examples:"
+for line in badLinesRDD.take(2):
+    print line
+//Scala
+println("Input had " + badLinesRDD.count() + " concerning lines")
+println("Here are 2 examples:")
+badLinesRDD.take(2).foreach(println)
