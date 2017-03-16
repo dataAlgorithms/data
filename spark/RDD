@@ -15,3 +15,21 @@ e2: Transfrom them to define new RDDs using transformations like filter()
 e3: Ask Spark to persist() any intermediate RDDs that will need to be reused
 e4: Launch actions such as count() and first() to kick off a parallel computation,
     which is then optimized and executed by Spark
+    
+2. RDD Creating
+Two way to Creating RDDS
+1. Take an existing collection and pass to parallelize
+//Python
+lines = sc.parallelize(["pandas", "i like pandas"])
+//Scala
+val lines = sc.parallelize(List("pandas", "i like pandas"))
+//Java
+JavaRDD<String> lines = sc.parallelize(Arrays.asList("pandas", "i like pandas"));
+
+2. Load data from external storage, eg. textFile()
+//Python
+lines = sc.textFile("e:\\spark\\README.md") 
+//Scala
+val lines = sc.textFile("e:\\spark\\README.md")
+//Java
+JavaRDD<String> lines = sc.textFile("e:\\spark\\README.md");
