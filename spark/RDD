@@ -63,3 +63,58 @@ for line in badLinesRDD.take(2):
 println("Input had " + badLinesRDD.count() + " concerning lines")
 println("Here are 2 examples:")
 badLinesRDD.take(2).foreach(println)
+
+4. Passing function
+Passing Functions to Spark
+//Python
+a. Passing entire functions 
+word = rdd.filter(lambda s: "error" in s)
+
+def contiansError(s):
+    return "error" in s
+word = rdd.filter(containsError)
+
+b. Passing a function with field references (donot do this)
+class SearchFunctions:
+    def __init__(self, query):
+        self.query = query
+    def isMatch(self, s):
+        return self.query in s
+    def getMatchesFunctionReference(self, rdd):
+        # Problem: references all of self in self.isMatch
+        return rdd.filter(self.isMatch)
+    def getMatchesMemberReference(self, rdd):
+        # Problem: references all of self in self.query
+        return rdd.filter(lambda x: self.query in x)
+
+c. Passing without field references
+class WordFunctions:
+
+    ...
+    def getMatchesNoReference(self, rdd):
+        # Safe: extract only the field we need into a local variable
+        query = self.query
+        return rdd.filter(lambda x: query in x)
+
+//Scala
+class SearchFunctions(val query: String) {
+    def isMatch(s: String): Boolean = {
+        s.contains(query)
+    }
+
+    def getMatchesFunctionReference(rdd: RDD[String]): RDD[String] = {
+        //Problem: isMatch means this.isMatch, so we pass all of this
+        rdd.map(isMatch)
+    }
+
+    def getMatchesFieldReference(rdd: RDD[String]): RDD[String] = {
+        //Problem: query means this.query, so we pass all of this
+        rdd.map(x => x.split(query))
+    }
+
+    def getMatchesNoReference(rdd: RDD[String]): RDD[String] = {
+        //Safe: extract just the field we need into a local variable
+        val query_ = this.query
+        rdd.map(x => x.split(query_))
+    }
+}
