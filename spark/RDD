@@ -118,3 +118,134 @@ class SearchFunctions(val query: String) {
         rdd.map(x => x.split(query_))
     }
 }
+
+5. Common Transformations and Actions
+Element-wise transformations
+  inputRDD{1,2,3,4}   
+    map x=> x*x Mapped RDD {1,4,9,16}
+    filter x => x!= 1 Filterd RDD {2,3,4}
+
+//Python
+a. Squaring the values in an RDD
+nums = sc.parallelize([1, 2, 3, 4])
+squared = nums.map(lambda x: x * x).collect()
+for num in squared:
+    print "%i," % (num),
+b. Splitting lines into words
+lines = sc.parallelize(["hello world", "hi"])
+words = lines.flatMap(lambda line: line.split(" "))
+words.first()
+
+//Scala
+a. Squaring the values in an RDD
+val input = sc.parallelize(List(1, 2, 3, 4))
+val result = input.map(x => x * x)
+println(result.collect().mkString(","))
+b. Spliting lines into multiple words
+val lines = sc.parallelize(List("hello world", "hi"))
+val words = lines.flatMap(line => line.split(" "))
+words.first()
+
+说明：map与flaMap的区别
+map()是将函数用于RDD中的每个元素，将返回值构成新的RDD。
+flatmap()是将函数应用于RDD中的每个元素，将返回的迭代器的所有内容构成新的RDD,
+         这样就得到了一个由各列表中的元素组成的RDD,而不是一个列表组成的RDD。
+
+scala> val rdd = sc.parallelize(List("coffee panda","happy panda","happiest pand
+a party"))
+rdd: org.apache.spark.rdd.RDD[String] = ParallelCollectionRDD[14] at parallelize
+ at <console>:24
+
+scala>
+
+scala> rdd.map(x=>x).collect
+res12: Array[String] = Array(coffee panda, happy panda, happiest panda party)
+
+scala> rdd.flatMap(x=>x).collect
+res13: Array[Char] = Array(c, o, f, f, e, e,  , p, a, n, d, a, h, a, p, p, y,  ,
+ p, a, n, d, a, h, a, p, p, i, e, s, t,  , p, a, n, d, a,  , p, a, r, t, y)
+
+scala> rdd.flatMap(x=>x.split(" ")).collect
+res14: Array[String] = Array(coffee, panda, happy, panda, happiest, panda, party
+)
+
+Pseudo set operations
+In [2]: rdd1 = sc.parallelize(["coffee", "coffee", "panda", "monkey", "tea"])
+In [3]: rdd2 = sc.parallelize(["coffee", "money", "kitty"])
+a. distinct(去重）
+In [3]: rdd1.distinct().collect()
+Out[3]: ['coffee', 'tea', 'panda', 'monkey']
+b. union(并集）
+In [4]: rdd1.union(rdd2).collect()
+Out[4]: ['coffee', 'coffee', 'panda', 'monkey', 'tea', 'coffee', 'money', 'kitty']
+c. intersection(交集）
+In [6]: rdd1.intersection(rdd2).collect()
+Out[6]: ['coffee']
+d. subtract(差集)
+In [7]: rdd1.subtract(rdd2).collect()
+Out[7]: ['tea', 'panda', 'monkey']
+e. cartesian(笛卡尔积)
+In [8]: rdd3 = sc.parallelize([1,2])
+In [9]: rdd4 = sc.parallelize([3,4])
+In [10]: rdd3.cartesian(rdd4)
+In [11]: rdd3.cartesian(rdd4).collect()
+Out[11]: [(1, 3), (1, 4), (2, 3), (2, 4)]
+
+Actions
+reduce: operates on two elements of the type 
+//Python
+sum = rdd.reduce(lambda x, y: x + y)
+//Scala
+val sum = rdd.reduce((x, y) => x + y)
+
+collect: return all elements from the RDD
+rdd.collect() 
+
+count: number of elements in the RDD
+rdd.count()
+
+countByValue(): number of times each element occurs in the RDD
+rdd.countByValue()
+
+take(num): return num elements from the RDD
+rdd.take(2)
+
+top(num): return the top num elements the RDD
+rdd.top(2)
+
+takeOrderednum)(ordering): return num elements based on provide ordering
+rdd.takeOrdered(2)(myOrdering)
+
+takeSample(withReplacement, num, [seed]): return num elments at random
+rdd.takeSample(false, 1)
+
+reduce(func): combine the elements of the RDD in parallel
+rdd.reduce((x, y) => x + y)
+
+fold(zero)(func): same as reduce but with provided zero value
+rdd.fold(0)((x, y) => x + y)
+
+aggregate(zeroValue)(seqOp, combOp): Similar to recduce() but return a different type
+rdd.aggregate((0, 0))((x,y)=>
+                      (x._1 + y, x._2 + 1), (x, y) =>
+                      (x._1 + y._1, x._2 + y._2))
+
+foreach(func): apply the provided function to each element of the RDD
+rdd.foreach(func)
+
+Persistence(Caching)
+
+StorageLevel             SpaceUsed         CpuTime              InMemory            OnDisk
+memory_only                high               low                  y                 n
+memory_only_ser            low                high                 y                 n
+memory_and_disk            high              medium               some              some
+memory_only_ser            low                high                 y                 n
+memory_and_disk            high              medium               some              some
+memory_and_disk_ser        low                high                some              some
+disk_only                  low                high                 n                y
+
+//Scala
+val result = input.map(x => x * x)
+reslut.persit(StorageLevel.DISK_ONLY)
+println(result.count())
+println(result.collect().mkString(",")) 
