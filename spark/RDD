@@ -250,6 +250,7 @@ reslut.persit(StorageLevel.DISK_ONLY)
 println(result.count())
 println(result.collect().mkString(",")) 
 
+5. Working with key/value pair
 Creating Pair RDDs
 
 //Python
