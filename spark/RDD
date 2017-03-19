@@ -249,3 +249,98 @@ val result = input.map(x => x * x)
 reslut.persit(StorageLevel.DISK_ONLY)
 println(result.count())
 println(result.collect().mkString(",")) 
+
+Creating Pair RDDs
+
+//Python
+Creating a pair RDD using the first word as the key 
+In [11]: lines = sc.textFile(r"e:\spark\README.md")
+In [12]: pairs = lines.map(lambda x: (x.split(" ")[0], x))
+
+//Scala
+Creating a pair RDD using the first word as the key
+scala> val lines = sc.textFile("e:\\spark\\README.md")
+lines: org.apache.spark.rdd.RDD[String] = e:\spark\README.md MapPartitionsRDD[1]
+ at textFile at <console>:24
+scala> val pairs = lines.map(x => (x.split(" ")(0), x))
+pairs: org.apache.spark.rdd.RDD[(String, String)] = MapPartitionsRDD[3] at map a
+t <console>:26
+
+Transformations on Pair RDDs (example: {(1,2),(3,4),(3,6)})
+FunctionName/Purpose/Example/Result
+reduceByKey(func)
+  Combine values with the same key
+  rdd.reducebyKey((x, y) => x + y)
+  {(1,2),(3,10)}
+
+groupByKey()
+  Group values with the same key
+  rdd.groupByKey()
+  {(1,[2]),(3,[4,6])}
+
+combineByKey(createCombiner,mergeValue,mergeCombiners,partitioner)
+  Combine values with the same key using a different result type
+
+mapValues(func)
+  Apply a function to each value of a pair RDD without changing the key
+  rdd.mapValues(x => x+1)
+  {(1,3),(3,5),(3,7)}
+
+flatMapValues(func)
+  Apply a function that returns an iterator to each value of a pair RDD
+  and for each element returned, produce a key/value entry with the old key
+  often used for tokenization
+  rdd.flatMapValues(x => (x to 5)
+  {(1,3),(1,4),(1,5),(3,4),(3,5)}
+
+keys()
+  Return an RDD of just the keys
+  rdd.keys()
+  {1,3,3}
+
+values()
+  Return an RDD of just the values
+  rdd.values()
+  {2,4,6}
+
+sortByKey()
+  Return an RDD sorted by the key
+  rdd.sortByKey()
+  {(1,2),(3,4),(3,6)}
+
+Transformations on two pair RDDs 
+  (rdd={(1,2),(3,4),(3,6)} other={(3,9)})
+
+subtractByKey
+  Remove elements with a key present in the other RDD
+  rdd.subtractByKey(other)
+  {(1,2)}
+
+join
+  Perform an inner join between two RDDs
+  rdd.join(other)
+  {(3,(4,9)),(3,(6,9))}
+
+rightOuterJoin
+  Perform a join between two RDDs where the 
+  key must be present in the first RDD
+  rdd.rightOuterJoin(other)
+  {(3,(Some(4),9)),(3,(Some(6),9))}
+
+leftOuterJoin
+  Perform a join between two RDDs where the 
+  key must be present in the other RDD
+  rdd.leftOuterJoin(other)
+  {(1,(2,None)),(3,(4,Some(9))),(4,(6,Some(9)))}
+
+cogroup
+  Group data from both RDDs sharing the same key
+  rdd.cogroup(other)
+  {(1,([2],[])),(3,([4,6],[9]))}
+
+eg.
+Filter out lines longer than 20 characters (on second element)
+//Python
+result = pairs.filter(lambda keyValue: len(keyValue[1]) < 20)
+//Scala
+val result = pairs.filter{case (key, value) => value.length < 20}
