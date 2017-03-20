@@ -345,3 +345,102 @@ Filter out lines longer than 20 characters (on second element)
 result = pairs.filter(lambda keyValue: len(keyValue[1]) < 20)
 //Scala
 val result = pairs.filter{case (key, value) => value.length < 20}
+
+Aggregation
+
+Per-key average with reduceByKey() and mapValues() 
+//Python
+rdd.mapValues(lambda x: (x, 1)).reduceByKey(lambda x, y: (x[0] + y[0], x[1] + y[1]))
+//Scala
+rdd.mapValues(x => (x, 1)).reduceByKey((x, y) => (x._1 + y._1, x._2 + y._2))
+
+key           value
+panda           0
+pink            3
+pirate          3
+panda           1
+pink            4
+       |
+       |mapValues 
+      \|/
+key            value
+panda          (0, 1)
+pink           (3, 1)
+pirate         (3, 1)
+panda          (1, 1)
+pink           (4, 1)
+       |
+       | reduceByKey
+      \|/
+key             value
+panda           (1, 2)
+pink            (7, 2)
+pirate          (3, 1)
+
+Word count
+//Python
+rdd = sc.textFile("s3://...")
+words = rdd.flatMap(lambda x: x.split(" "))
+result = words.map(lambda x: (x, 1)).reduceByKey(lambda x, y: x + y)
+or
+result = rdd.flatMap(x => x.split(" ")).countByValue()
+
+//Scala
+val input = sc.textFile("s3://...")
+val words = input.flatMap(x => x.split(" "))
+val result = words.map(x => (x, 1)).reduceByKey((x, y) => x + y)
+or
+val result = input.flatMap(x => x.split(" ")).countByValue()
+
+Per-key average using combineByKey() 
+//Python
+sumCount = nums.combineByKey((lambda x: (x, 1)),
+                             (lambda x, y: (x[0] + y, x[1] + 1)),
+                             (lambda x, y: (x[0] + y[0], x[1] + y[1])))
+sumCount.map(lambda key, xy: (key, xy[0]/xy[1])).collectAsMap()
+//Scala
+val result = input.combineByKey(
+  (v) => (v, 1),
+  (acc: (Int, Int), v) => (acc._1 + v, acc._2 + 1),
+  (acc1: (Int, Int), acc2: (Int, Int)) => (acc1._1 + acc2._1, acc1._2 + acc2._2)
+  ).map{case (key, value) => (key, value._1/value._2.toFloat)}
+  result.collectAsMap().map(println(_))
+
+Partition1
+coffee    1
+coffee    2
+panda     3
+
+Partition1 trace:
+(coffee, 1) -> new key
+accumulators[coffee] = createCombiner(1)
+(coffee, 2) -> existing key
+accumulators[coffee] = mergeValue(accumulators[coffee],2)
+(panda, 3) -> new key
+accumulators[panda] = createCombiner(3)
+
+Partition2 trace:
+(coffee, 9) => new key
+accumulators[coffee] = createCombiner(9)
+MergePartitions:
+mergeCombiners(partition1.accumulators[coffee],
+               partition2.accumulators[coffee])
+
+def createCombiner(value):
+    (value, 1)
+
+def mergeValue(acc, value):
+    (acc[0] + value, acc[1] + 1)
+
+def mergeCombiners(acc1, acc2):
+    (acc1[0] + acc2[0], acc1[1] + acc2[1])
+
+reduceByKey with custom parallelism
+//Python
+data = [("a", 3), ("b", 4), ("a", 1)]
+sc.parallelize(data).reduceByKey(lambda x, y: x + y) # Default parallelism
+sc.parallelize(data).reduceByKey(lambda x, y: x + y, 10) # Custom parallelism
+//Scala
+val data = Seq(("a", 3), ("b", 4), ("a", 1))
+sc.parallelize(data).reduceByKey((x, y) => x + y) //Default parallelism
+sc.parallelize(data).reduceByKey((x, y) => x + y, 10) //Custom parallelism
