@@ -444,3 +444,13 @@ sc.parallelize(data).reduceByKey(lambda x, y: x + y, 10) # Custom parallelism
 val data = Seq(("a", 3), ("b", 4), ("a", 1))
 sc.parallelize(data).reduceByKey((x, y) => x + y) //Default parallelism
 sc.parallelize(data).reduceByKey((x, y) => x + y, 10) //Custom parallelism
+
+Custom sort order, sorting integers as if strings
+//Python
+rdd.sortByKey(ascending=True, numPartitions=None, keyfunc=lambda x: str(x))
+//Scala
+val input: RDD[(Int, Venue)] = ...
+implicit val sortIntegersByString = new Ordering[Int] {
+    override def compare(a: Int, b: Int) = a.toString.compare(b.toString)
+}
+rdd.sortByKey()
