@@ -471,3 +471,24 @@ lookup(key)
  Return all values associated with the provided key
  rdd.lookup(3)
  [4,6]
+
+7. Data partition
+//Initialization code: we load the user info from a hadoop SequenceFile on HDFS
+//This distributes elements of userData by the HDFS block where they are found
+//and does not provide Spark with any way of knowing in which partition a particular UserID is located
+val sc = new SparkContext(...)
+val uerData = sc.sequenceFile[UserID, UserInfo]("hdfs://...").
+                   partitionBy(new HashPartitioner(100)).
+                   persist()
+
+//Fucntion called periodically to process a logfile of events in the past 5 minutes
+//we assume that this is a sequenceFile containing(UserId, LinkedInfo) pairs
+def processNewLogs(logFileName: String) {
+    val events = sc.sequenceFile[UserID, LinkInfo](logFileName)
+    val joined = userData.join(events)//RDD of (UserId, (UserInfo, LinkInfo)) pairs
+    val offTopicVisits = joined.filter {
+        case (userId, (userInfo, linkInfo)) => //Expand the tuple into its components
+          !userInfo.topics.contains(linkInfo.topic)
+    }.count()
+    println("Number of visits to non-subscripbed topics: " + offTopicVisits)
+}
