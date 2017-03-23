@@ -553,3 +553,115 @@ def hash_domain(url):
     return hash(urlparse.urlparse(url).netloc)
 
 rdd.partitionBy(20, hash_domain)  # Create 20 partitions
+
+8. Load and save files
+Text file
+a. Loading a text file
+//Python
+input = sc.textFile("file://README.md")
+//Scala
+val input = sc.textFile("file://README.md")
+
+Average value per file in Scala
+val input = sc.wholeTextFiles("file:/home/salesFiles")
+val result = input.mapValues{y =>
+    val nums = y.split(" ").map(x => x.toDouble)
+    nums.sum / nums.size.toDouble
+}
+
+b. Saving as a text file in Python
+result.saveAsTextFile(outputFile)
+
+Json file
+a. Loading unstructured JSON 
+//Python
+import json
+data = input.map(lambda x: json.loads(x))
+//Scala
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.DeserializationFeature
+
+...
+case class Person(name: String, lovesPandas: Boolean) //Must be a top-level class
+...
+//Parse it into a specific case class, we use flatMap to handle errors
+//by returning an empty list (None) if we encounter an issue and a
+//list with one element if everything is ok (Some(_)).
+val result = input.flatMap(record => {
+    try {
+        Some(mapper.readValue(record, classof[Person]))
+    } catch {
+        case e: Exception => None
+    }
+})
+
+b. Saving Json 
+//Python
+(data.filter(lambda x: x['lovesPandas']).map(lambda x: json.dumps(x)).saveAsTextFile(outputFile))
+//Scala
+result.filter(p => p.lovesPandas).map(mapper.writeValueAsString(_)).saveAsTextFile(outputFile)
+
+CSV file
+a. Loading CSV with textFile
+//Python
+import csv
+import StringIO
+
+def loadRecord(line):
+    """Parse a CSV line"""
+    input = StringIO.StringIO(line)
+    reader = csv.DictReader(input, fieldnames=["name", "favouriteAnimal"])
+    return reader.next()
+
+input = sc.textFile(inputFile).map(loadRecord)
+
+//Scala
+import Java.io.StringReader
+import au.com.bytecode.opencsv.CSVReader
+
+val input = sc.textFile(inputFile)
+val result = input.map{line =>
+    val reader = new CSVReader(new StringReader(line));
+    reader.readNext();
+}
+
+b. Loading CSV in full 
+//Python
+def loadRecords(fileNameContents):
+    """Load all the records in a given file"""
+    input = StringIO.StringIO(fileNameContents[1])
+    reader = csv.DictReader(input, fieldnames=["name", "favoriteAnimal"])
+    return reader
+
+fullFileData = sc.wholeTextFiles(inputFile).flatMap(loadRecords)
+
+
+//Scala
+case class Person(name: String favoriteAnimal: String)
+val input = sc.wholeTextFiles(inputFile)
+val result = input.flatMap{case (_, txt) =>
+    val reader = new CSVReader(new StringReader(txt));
+    reader.readAll().map(x => Person(x(0), x(1))
+}
+
+c. Saving CSV 
+//Python
+def writeRecords(records):
+    """Write out CSV lines"""
+    output = StringIO.StringIO()
+    writer = csv.DictWriter(output, fieldnames=["name", "favoriteAnimal")
+    for record in records:
+        writer.writerow(record)
+pandaLovers.mapPartitions(writeRecords).saveAsTextFile(outputFile)
+
+
+//Scala
+pandaLovers.map(person => List(person.name, person.favoriteAnimal).toArray)
+.mapPartitions{people =>
+    val stringWriter = new StringWriter();
+    val ssvWriter = new CSVWriter(StringWriter);
+    csvWriter.writeAll(people.toList)
+    Iterator(stringWriter.toString)
+}.saveAsTextFile(outFile)
