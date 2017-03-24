@@ -665,3 +665,67 @@ pandaLovers.map(person => List(person.name, person.favoriteAnimal).toArray)
     csvWriter.writeAll(people.toList)
     Iterator(stringWriter.toString)
 }.saveAsTextFile(outFile)
+
+Loading a SequenceFile
+
+//Python
+data = sc.sequenceFile(inFile, "org.apache.hadoop.io.Text", "org.apache.hadoop.io.IntWritable")
+//Scala
+val data = sc.sequenceFile(inFile, classof[Text], classof[IntWritable]).
+  map{case (x, y) => (x.toString, y.get())}
+
+Saving a SequenceFile
+//Scala
+val data = sc.parallelize(List("Panda", 3), ("Kay", 6), ("Snail", 2))
+data.saveAsSequenceFile(outputFile)
+
+Loading keyValue TextInputFormat with old-style API 
+//Scala
+val input = sc.hadoopFile[Text, Text, KeyValueTextInputFormat](inputFile).map{
+    case (x, y) => (x.toString, y.toString)
+}
+
+Loading LZO-compressed Json with Elephant Bird
+//Scala
+val input = sc.newAPIHadoopFile(inputFile, classof[LzoJsonInputFormat],
+      classof[LongWritable], classof[MapWritable], conf)
+//Each MapWritable in input represent a JSON object
+
+Smaple protocol buffer definition
+message Venue {
+    required int32 id = 1;
+    required string name = 2;
+    required VenueType type = 3;
+    optional string address = 4;
+
+    enum VenueType {
+        COFFEESHOP = 0;
+        WORKPLACE = 1;
+        CLUB = 2;
+        ONNOMONOM = 3;
+        OTHER = 4;
+    }
+}
+
+message VenueResponse {
+    repeated Venue results = 1;
+}
+
+Elephant Bird protocol buffer writeout 
+//Scala
+val job = new Job()
+val conf = job.getConfiguration
+LzoProtobufBlockOutputFormat.setClassConf(classof[Places.Venue], conf);
+val dnaLounge = Places.Venue.newBuilder()
+dnaLounge.setId(1);
+dnaLounge.setName("DNA Lounge")
+dnaLounge.setType(Places.Venue.VeneueType.CLUB)
+val data = sc.parallelize(List(dnaLounge.build()))
+val outputData = data.map{ pb =>
+    val protoWritable = ProtobufWritable.newInstance(classof[Places.Venue]);
+    protoWritable.set(pb)
+    (null, protoWritable)
+}
+outputData.saveAsNewAPIHadoopFile(outputFile, classof[Text],
+  classof[ProtobufWritable[Places.Venue]],
+  classof[LzoProtobufBlockOutputFormat[ProtobufWriable[Places.Venue]]], conf)
