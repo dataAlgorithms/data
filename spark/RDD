@@ -729,3 +729,37 @@ val outputData = data.map{ pb =>
 outputData.saveAsNewAPIHadoopFile(outputFile, classof[Text],
   classof[ProtobufWritable[Places.Venue]],
   classof[LzoProtobufBlockOutputFormat[ProtobufWriable[Places.Venue]]], conf)
+
+9. Spark SQL
+
+Aache Hive
+
+Creating a HiveContext and selecting data
+//Python
+from pyspark.sql import HiveContext
+
+hiveCtx = HiveContext(sc)
+rows = hiveCtx.sql("SELECT name, age FROM users")
+firstRow = rows.first()
+print firstRwo.name
+
+//Scala
+import org.apache.spark.sql.hive.HiveContext
+
+val hiveCtx = new oarg.apache.spark.sql.hive.HiveContext(sc)
+val rows = hiveCtx.sql("SELECT name, age FROM users")
+val firstRow = rows.first()
+println(firstRow.getString(0)) //Field 0 is the name
+
+Json
+
+Json loading with Spark SQL
+//Python
+tweets = hiveCtx.jsonFile("tweets.json")
+tweets.registerTempTable("tweets")
+results = hiveCtx.sql("SELECT user.name, text FROM tweets")
+
+//Scala
+val tweets = hiveCtx.jsonFile("tweets.json")
+tweets.registerTempTable("tweets")
+val results = hiveCtx.sql("SEELCT user.name, text FROM tweets")
