@@ -763,3 +763,78 @@ results = hiveCtx.sql("SELECT user.name, text FROM tweets")
 val tweets = hiveCtx.jsonFile("tweets.json")
 tweets.registerTempTable("tweets")
 val results = hiveCtx.sql("SEELCT user.name, text FROM tweets")
+
+Databases
+
+//Java Database Connectivity
+def createConnection() = {
+    Class.forName("com.mysql.jdbs.Driver").newInstance();
+    DriverManager.getConnection("jdbs:mysql://localhost/test?user=holden");
+}
+
+def extractValues(r: ResultSet) = {
+    (r.getInt(1), r.getString(2))
+}
+
+val data = new JdbcRDD(sc,
+  createConnection, "SELECT * FROM panda WHERE ? <= id AND id <= ?",
+  lowerBound = 1, upperBound = 3, numPartitions = 2, mapRow = extractValues)
+println(data.collect().toList)
+
+Cassandra
+//Setting the Cassandra property
+val conf = new SparkConf(true).set("spark.cassandra.connection.host", "hostname")
+
+//Loading the entire table as an RDD with key/value data
+//Implicits that add functions to the SparkContext & RDDs
+import com.datastax.spark.connector._
+
+//Read entire table as an RDD. Assume your table tet was created as
+//Create table test.kv(keytext primary key, value int);
+val data = sc.cassandraTable("test", "kv")
+//Print some basic status on the value field
+data.map(row => row.getInt("value")).stats()
+
+//Saving to Cassandra 
+val rdd = sc.parallelize(List(Seq("moremagic", 1)))
+rdd.saveToCassandra("test", "kv", SomeColumns("key", "value"))
+
+HBase
+
+//Scala example of reading from HBase
+import org.apache.hadoop.hbase.HBaseConfiguration
+import org.apache.hadoop.hbase.client.Result
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable
+import org.apache.hadoop.hbase.mapreduce.TableInputFormat
+
+val conf = HBaseConfiguration.create()
+conf.set(TableInputFormat.INPUT_TABLE, "tablename")
+
+val rdd = sc.newAPIHadoopRDD(
+  conf, classOf[TableInputFormat], classOf[ImmutableBytesWritable], classOf[Result])
+
+Elasticsearch
+
+//Elasticsearch output
+val jobConf = new JobConf(sc.hadoopConfiguration)
+jobConf.set("mapred.output.format.class", "org.elasticsearch.hadoop.mr.EsOutputFormat")
+jobConf.setOutputCommitter(classOf[FileOutputCommitter])
+jobConf.set(ConfigurationOptions.ES_RESOURCE_WRITE, "twitter/tweets")
+jobConf.set(ConfigurationOptions.ES_NODES, "localhost")
+FileOutputFormat.setOutputPath(jobConf, new Path("-"))
+output.saveAsHadoopDataset(jobConf)
+
+//Elasticsearch input
+def mapWritableToInput(in: MapWritable): Map[String, String] = {
+    in.map{case (k, v) => (k.toString, v.toString)}.toMap
+}
+
+val jobConf = new JobConf(sc.hadoopConfiguration)
+jobConf.set(ConfigurationOptions.ES_RESOURCE_READ, args(1))
+jobConf.set(ConfigurationOptions.ES_NODES, args(2))
+val currentTweets = sc.hadoopRDD(jobConf,
+    classOf[EsInputFormat[Object, MapWriable]], classOf[Object],
+    classOf[MapWritable])
+//Extract only the map
+//Convert the MapWriable[Text, Text] to Map[String, String]
+val tweets = currentTweets.map{case (key, value) => mapWriableToInput(value)}
