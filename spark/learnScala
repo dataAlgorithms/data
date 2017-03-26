@@ -1,0 +1,99 @@
+1. Scala List Operation
+
+The empty list
+scala> List()
+res10: List[Nothing] = List()
+
+scala> Nil
+res11: scala.collection.immutable.Nil.type = List()
+
+Create a new list[String] with the three values Cool, tools, rule
+scala> List("Cool", "tools", "rule")
+res12: List[String] = List(Cool, tools, rule)
+
+create a new List[String] with three values Will, fill, and until
+scala> val thrill = "Will" :: "fill" :: "until" :: Nil
+thrill: List[String] = List(Will, fill, until)
+
+Concatenates two lists (reutrna s new  List[String] with values a,b,c,d
+scala> List("a", "b") ::: List("c", "d")
+res13: List[String] = List(a, b, c, d)
+
+Returns the element at index 2 (zero based) of thrill list (returns until)
+scala> thrill(2)
+res14: String = until
+
+Counts the number of string element in thrill that have length 4(returns 2)
+scala> thrill.count(s => s.length == 4)
+res16: Int = 2
+
+Returns the thrill list without its first 2 elements
+scala> thrill.drop(2)
+res17: List[String] = List(until)
+
+Returns the thrill list without its rightmost 2 elements 
+scala> thrill.dropRight(2)
+res18: List[String] = List(Will)
+
+Determines whether a string element exists in thrill that has the value until
+scala> thrill.exists(s => s == "until")
+res19: Boolean = true
+
+Returns a list of all elements, in order, of the thrilllist that have length 4
+scala> thrill.filter(s => s.length == 4)
+res20: List[String] = List(Will, fill)
+
+Indicates whether all elements in the thrill list end with letter l
+scala> thrill.forall(s => s.endsWith("l"))
+res21: Boolean = true
+
+Execute the print statement on each of the strings in the thrill list
+scala> thrill.foreach(s => print(s))
+Willfilluntil
+scala> thrill.foreach(print)
+Willfilluntil
+
+Returns the first element in the thrill list
+scala> thrill.head
+res24: String = Will
+
+Returns a list of all but the last element
+scala> thrill.init
+res25: List[String] = List(Will, fill)
+
+Indicates whether the thrill list is empty
+scala> thrill.isEmpty
+res26: Boolean = false
+
+Return the last element in the thrill list
+scala> thrill.last
+res27: String = until
+
+Return the number of elements in the thrill
+scala> thrill.length
+res28: Int = 3
+
+Reeturns a list result from add a y to each string element
+scala> thrill.map(s => s + "y")
+res29: List[String] = List(Willy, filly, untily)
+
+Make a string with the elements of the list
+scala> thrill.mkString(",")
+res31: String = Will,fill,until
+
+Return a list of all element,in order, of the list except those that have length 4
+scala> thrill.filterNot(s => s.length == 4)
+res32: List[String] = List(until)
+
+Returns a l sit in reverse order
+scala> thrill.reverse
+res33: List[String] = List(until, fill, Will)
+
+Returns a list containing all elements of the list in alphabetical order
+              of the first character lowerased
+scala> thrill.sortWith((s, t) => s.charAt(0).toLower < t.charAt(0).toLower)
+res40: List[String] = List(fill, until, Will)
+
+Returns the list minus its first element
+scala> thrill.tail
+res41: List[String] = List(fill, until)
