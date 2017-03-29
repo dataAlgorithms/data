@@ -942,3 +942,104 @@ val countryContactCounts = contactCounts.map{case (sign, count) =>
             (country, count)
 }.reduceByKey((x, y) => x + y)
 countryContactCounts.saveAsTextFile(outputDir + "/countries.txt")
+
+Shared connection pool
+
+//Python
+def processCallSigns(signs):
+    """Lookup call signs using a connection pool"""
+    # Create a connection pool
+    http = urllib3.PoolManager()
+    # the URL associated with each call sign record
+    urls = map(lambda x: "http://73s.com/qsos/%s.json" % x, signs)
+    # create the requests (non-blocking)
+    requests = map(lambda x: (x, http.request('GET', x)), urls)
+    # fetch the results
+    result = map(lambda x: (x[0], json.loads(x[1].data)), requests)
+    # remove any empty results and return
+    return filter(lambda x: x[1] is not None, result)
+
+def fetchCallSigns(input):
+    """Fetch call signs"""
+    return input.mapPartitions(lambda callSigns: processCallSigns(callSigns))
+
+contactsContactList = fetchCallSigns(validSigns)
+
+//Scala
+val contactsContactLists = validSigns.distinct().mapPartitions{
+    signs =>
+    val mapper = createMapper()
+    val client = new HttpClient()
+    client.start()
+    //create http request
+    signs.map {sign =>
+        createExchangeForSign(sign)
+    //fetch responses
+    }.map{case (sign, exchange) =>
+        (sign, readExchangeCallLog(mapper, exchange))
+    }.filter(x => x._2 != null) // Remove empty Calllogs
+}
+
+Average without mapPartition
+def combineCtrs(c1, c2):
+    return (c1[0] + c2[0], c1[1] + c2[1])
+
+def basicAvg(nums):
+    """Compute the average"""
+    nums.map(lambda num: (num, 1)).reduce(combineCtrs)
+
+Average with mapPartition
+def partitionCtr(nums):
+    """Compute sumCounter for partition"""
+    sumCount = [0, 0]
+    for num in nums:
+        sumCount[0] += num
+        sumCount[1] += 1
+    return [sumCount]
+
+def fastAvg(nums):
+    """Compute the avg"""
+    sumCount = nums.mapPartitions(partionCtr).reduce(combineCtrs)
+    return sumCount[0] / float(sumCount[1])
+
+# Compute the distance of each call using an external R program
+distScript = "./src/R/finddistance.R"
+distScriptName = "finddistance.R"
+sc.addFile(distScript)
+def hasDistInfo(call):
+    """Verify that a call has the fields required to compute the distance"""
+    requireFields = ["mylat", "mylong", "contactlat", "contactlong"]
+    return all(map(lambda f: call[f], requiredFields))
+
+def formatCall(call):
+    """Format a call so that it can be parsed by our R program"""
+    return "{0},{1},{2},{3}".format(
+                call['mylat'], call['mylong'],
+                call['contactlat'], call['contactlong'])
+
+pipeInputs = contactsContactList.values().flatMap(
+   lambda calls: map(formatCall, filter(hasDistInfo, calls)))
+distances = pipeInputs.pipe(SparkFiles.get(distScriptName))
+print distances.collect()
+
+Removing outliers
+//Python
+# Convert our RDD of strings to numeric data so we can compute stats and
+# remove the outliers
+distanceNumerics = distances.map(lambda string: float(string))
+stats = distanceNumerics.stats()
+stdev = std.stdev()
+mean = stats.mean()
+reaonableDistances = distanceNumerics.filter(
+  lambda x: math.fabs(x - mean) < 3 * stddev)
+print reasonableDistances.collect()
+
+//Scala
+//Now we can go ahead and remove outliers since those may have misreported locations
+//first we need to take our RDD of strings and turn it into doubles
+val distanceDouble = distance.map(string => string.toDouble)
+val stats = distanceDoubles.stats()
+val stddev = stats.stdev
+val mean = stats.mean
+val reaonableDistances = distanceDoubles.filter(x => math.abs(x-mean) < 3 * stddev)
+println(reasonableDistance.collect().toList)
