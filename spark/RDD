@@ -897,3 +897,48 @@ if invalidSignCount.value < 0.1 * validSignCount.value:
     contactCount.saveAsTextFile(outputDir + "/contactCount")
 else:
     print "Too many errors: %d in %d" % (invalidSignCount.value, validSignCount.value)
+
+Country lookup 
+
+//Python
+# Look up the locations of the call signs on the
+# RDD contactCounts, We load a list of call sign
+# prefixes to country code to support this lookup
+signPrefixes = loadCallSignTable()
+
+def processSignCount(sign_count, signPrefixes):
+    country = lookupCountry(sign_count[0], signPrefixes)
+    count = sign_count[1]
+    return (country, count)
+
+countryConcatCounts = (contactCounts.map(processSignCount)
+                           .reduceByKey((lambda x, y: x + y)))
+
+Country lookup with broadcast value
+//Python
+# Look up the location of the call signs on the 
+# RDD contactCounts. We load a list of call sign
+# prefixes to country code to support this lookup
+signPrefixes = sc.broadcase(loadCallSignTable())
+
+def processSignCount(sign_count, signPrefixes):
+    country = lookupCountry(sign_count[0], signPrefixes.value)
+    count = sign_count[1]
+    return (country, count)
+
+countryContactCounts = (contactCounts.
+                         .map(processSignCount)
+                         .reduceByKey((lambda x, y: x + y )))
+
+countryContactCounts.saveAsTextFile(outputDir + "/countries.txt")
+
+//Scala
+//Look up the countries for each call sign for the 
+//contactCounts RDD. We load an array of call sign
+//prefixes to country code to support this lookup
+val signPrefixes = sc.broadcast(loadCallSignTable())
+val countryContactCounts = contactCounts.map{case (sign, count) =>
+    val country = lookupInArray(sign, signPrefixes.value)
+            (country, count)
+}.reduceByKey((x, y) => x + y)
+countryContactCounts.saveAsTextFile(outputDir + "/countries.txt")
