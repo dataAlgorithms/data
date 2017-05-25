@@ -1,0 +1,21 @@
+1. Question
+[info] Resolving org.apache.spark#spark-core_2.10.4;1.0.2 ...
+[warn]  module not found: org.apache.spark#spark-core_2.10.4;1.0.2
+[warn] ==== local: tried
+[warn]   /home/hduser/.ivy2/local/org.apache.spark/spark-core_2.10.4/1.0.2/ivys/ivy.xml
+[warn] ==== Akka Repository: tried
+[warn]   http://repo.akka.io/releases/org/apache/spark/spark-core_2.10.4/1.0.2/spark-core_2.10.4-1.0.2.pom
+[warn] ==== public: tried
+[warn]   http://repo1.maven.org/maven2/org/apache/spark/spark-core_2.10.4/1.0.2/spark-core_2.10.4-1.0.2.pom
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  ::          UNRESOLVED DEPENDENCIES         ::
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[warn]  :: org.apache.spark#spark-core_2.10.4;1.0.2: not found
+[warn]  ::::::::::::::::::::::::::::::::::::::::::::::
+[error] {file:/home/prithvi/scala/asd/}default-d57abf/*:update: sbt.ResolveException: unresolved dependency: org.apache.spark#spark-core_2.10.4;1.0.2: not found
+[error] Total time: 2 s, completed 13 Aug, 2014 5:24:24 PM
+
+https://stackoverflow.com/questions/25285855/unresolved-dependencies-error-while-trying-to-create-jar
+
+2. Install sbt win7
+http://www.infocool.net/kb/Eclipse/201701/280510.html
