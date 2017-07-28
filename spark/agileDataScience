@@ -1,0 +1,15 @@
+1. gradlew jar
+由于官网打不开， 所以gradle-2.2.1-all.zip下载不了
+
+解决办法：
+So, I changed distributionUrl property in gradle-wrapper.properties(mongo-hadoop/gradle/wrapper/gradle-wrapper.properties) to
+
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=gradle-1.11-bin.zip
+Then, I made a copy of gradle-1.11-bin.zip in gradle/wrapper/.
+
+参考：
+https://stackoverflow.com/questions/22896569/how-to-use-gradle-zip-in-local-system-without-downloading-when-using-gradle-wrap
