@@ -13,3 +13,10 @@ Then, I made a copy of gradle-1.11-bin.zip in gradle/wrapper/.
 
 参考：
 https://stackoverflow.com/questions/22896569/how-to-use-gradle-zip-in-local-system-without-downloading-when-using-gradle-wrap
+
+2. Exception in thread "main" java.lang.RuntimeException: don't run elasticsearch as root.
+方法1: 
+elasticsearch/bin/elasticsearch -Des.insecure.allow.root=true
+
+方法2：
+https://my.oschina.net/topeagle/blog/591451
