@@ -1,0 +1,24 @@
+1. Java install
+下载：(http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+jdk-8u141-linux-x64.rpm 
+
+安装：
+rpm -Uvh jdk-8u141-linux-x64.rpm 
+
+环境变量： 
+vi ~/.bashrc
+
+# JAVA home
+export JAVA_HOME=/usr/java/jdk1.8.0_141
+export JAVA_HOME
+export PATH=$JAVA_HOME/bin:$PATH
+export PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export CLASSPATH
+
+2. Anaconda install
+下载：(http://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh)
+安装：
+Anaconda3-4.2.0-Linux-x86_64.sh" -b -p root/anaconda
+环境变量：
+export PATH="/root/anaconda3/bin:$PATH"
