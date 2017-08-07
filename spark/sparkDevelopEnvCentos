@@ -35,3 +35,28 @@ export PATH="/root/anaconda3/bin:$PATH"
   export HADOOP_CLASSPATH=$(hadoop classpath)
   export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 
+4. Spark install
+下载：
+  curl -Lko /tmp/spark-2.1.0-bin-without-hadoop.tgz http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-without-hadoop.tgz
+解压：
+  tar -zxvf spark-2.1.0-bin-without-hadoop.tgz
+  mv spark-2.1.0-bin-without-hadoop spark
+环境变量：
+export SPARK_HOME=$PROJECT_HOME/spark
+export HADOOP_CONF_DIR=$PROJECT_HOME/hadoop/etc/hadoop/
+export SPARK_DIST_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`
+export PATH=$PATH:$SPARK_HOME/bin
+配置：
+ # Have to set spark.io.compression.codec in Spark local mode
+  cp spark/conf/spark-defaults.conf.template spark/conf/spark-defaults.conf
+  echo 'spark.io.compression.codec org.apache.spark.io.SnappyCompressionCodec' >> spark/conf/spark-defaults.conf
+
+  # Give Spark 8GB of RAM
+  echo "spark.driver.memory 8g" >> $SPARK_HOME/conf/spark-defaults.conf
+
+  echo "PYSPARK_PYTHON=python3" >> $SPARK_HOME/conf/spark-env.sh
+  echo "PYSPARK_DRIVER_PYTHON=python3" >> $SPARK_HOME/conf/spark-env.sh
+
+  # Setup log4j config to reduce logging output
+  cp $SPARK_HOME/conf/log4j.properties.template $SPARK_HOME/conf/log4j.properties
+  sed -i 's/INFO/ERROR/g' $SPARK_HOME/conf/log4j.properties
