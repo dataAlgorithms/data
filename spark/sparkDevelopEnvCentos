@@ -87,3 +87,11 @@ cd $PROJECT_HOME# to $PROJECT_HOME
 cp mongo-hadoop/spark/src/main/python/pymongo_spark.py lib/
 export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib
 echo 'export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib' >> ~/.bash_profile
+
+6. elasticsearch
+下载：
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.tar.gz
+解压：
+tar -zxvf elasticsearch-5.1.1.tar.gz
+mv elasticsearch-5.1.1 elasticsearch
+启动：
