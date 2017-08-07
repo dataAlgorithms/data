@@ -60,3 +60,30 @@ export PATH=$PATH:$SPARK_HOME/bin
   # Setup log4j config to reduce logging output
   cp $SPARK_HOME/conf/log4j.properties.template $SPARK_HOME/conf/log4j.properties
   sed -i 's/INFO/ERROR/g' $SPARK_HOME/conf/log4j.properties
+
+5. Mongodb install
+下载：
+  curl -Lko mongodb-linux-x86_64-amazon-3.4.1.tgz https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.4.2.tgz
+解压：
+  tar -zxvf mongodb-linux-x86_64-amazon-3.4.1.tgz
+  mv mongodb-linux-x86_64-amazon-3.4.1 mongodb
+启动：
+mkdir -p mongodb/data/db
+mongodb/bin/mongod --dbpath mongodb/data/db &
+包：
+mkdir lib
+curl -Lko lib/mongo-java-driver-3.4.0.jar http://central.maven.org/maven2/org/mongodb/mongo-java-driver/3.4.0/mongo-java-driver-3.4.0.jar
+curl -Lko mongo-hadoop-r2.0.2.tar.gz https://github.com/mongodb/mongo-hadoop/archive/r2.0.2.tar.gz
+tar -zxvf mongo-hadoop-r1.5.2.tar.gz 
+mv mongo-hadoop-r1.5.2 mongo-hadoop
+cd mongo-hadoop
+./gradlew jar
+cd ..
+cp mongo-hadoop/spark/build/libs/mongo-hadoop-spark-*.jar lib/
+cp mongo-hadoop/build/libs/mongo-hadoop-*.jar lib/
+cd mongo-hadoop/spark/src/main/python
+python setup.py install
+cd $PROJECT_HOME# to $PROJECT_HOME
+cp mongo-hadoop/spark/src/main/python/pymongo_spark.py lib/
+export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib
+echo 'export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib' >> ~/.bash_profile
