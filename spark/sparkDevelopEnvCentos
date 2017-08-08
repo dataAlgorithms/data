@@ -90,8 +90,10 @@ echo 'export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib' >> ~/.bash_profile
 
 6. elasticsearch
 下载：
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.tar.gz
+https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.5/elasticsearch-2.3.5.tar.gz
 解压：
-tar -zxvf elasticsearch-5.1.1.tar.gz
-mv elasticsearch-5.1.1 elasticsearch
+tar -zxvf elasticsearch-2.3.5.tar.gz
+mv elasticsearch-2.3.5 elasticsearch
 启动：
+elasticsearch/bin/elasticsearch -Des.insecure.allow.root=true
+
