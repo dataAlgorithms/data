@@ -139,3 +139,12 @@ echo "export SPARK_MASTER=local" >> zeppelin/conf/zeppelin-env.sh
 echo "export SPARK_CLASSPATH=" >> zeppelin/conf/zeppelin-env.sh
 To start Zeppelin, run zeppelin/bin/zeppelin-daemon.sh start and then visit
 http://localhost:8080 to check out the user interface. 
+
+10. airflow
+ pip install airflow
+  mkdir ~/airflow
+  mkdir ~/airflow/dags
+  mkdir ~/airflow/logs
+  mkdir ~/airflow/plugins
+  airflow initdb
+  airflow webserver -D
