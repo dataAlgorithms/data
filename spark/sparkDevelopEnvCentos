@@ -186,3 +186,9 @@ export SPARK_DIST_CLASSPATH=`$HADOOP_HOME/bin/hadoop classpath`
 export CLASSPATH=$($HADOOP_HOME/bin/hadoop classpath):$CLASSPATH
 
 export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:${SPARK_HOME}/bin:$PATH
+
+12. spark env
+PYSPARK_PYTHON=python3
+PYSPARK_DRIVER_PYTHON=python3
+SPARK_CLASSPATH=/root/workspace/lib/snappy-java-1.1.2.6.jar
+export SPARK_DIST_CLASSPATH=$(hadoop classpath)
