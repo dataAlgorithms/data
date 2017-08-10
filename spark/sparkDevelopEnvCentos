@@ -114,12 +114,12 @@ curl -Lko lib/snappy-java-1.1.2.6.jar http://central.maven.org/maven2/org/xerial
 curl -Lko lib/lzo-hadoop-1.0.5.jar http://central.maven.org/maven2/org/anarres/lzo/lzo-hadoop/1.0.0/lzo-hadoop-1.0.0.jar
 
 # Setup mongo and elasticsearch jars for Spark
-echo "spark.jars $PROJECT_HOME/lib/mongo-hadoop-spark-2.0.0-rc0.jar,\
-$PROJECT_HOME/lib/mongo-java-driver-3.2.2.jar,\
-$PROJECT_HOME/lib/mongo-hadoop-2.0.0-rc0.jar,\
+echo "spark.jars $PROJECT_HOME/lib/mongo-hadoop-spark-1.5.2.jar,\
+$PROJECT_HOME/lib/mongo-java-driver-3.4.0.jar,\
+$PROJECT_HOME/lib/mongo-hadoop-1.5.2.jar,\
 $PROJECT_HOME/lib/elasticsearch-spark-20_2.10-5.0.0-alpha5.jar,\
 $PROJECT_HOME/lib/snappy-java-1.1.2.6.jar,\
-$PROJECT_HOME/lib/lzo-hadoop-1.0.0.jar" \
+$PROJECT_HOME/lib/lzo-hadoop-1.0.5.jar" \
   >> spark/conf/spark-defaults.conf
 
 # Setup spark classpath for snappy for parquet... required for OS X 10.11, others can skip
