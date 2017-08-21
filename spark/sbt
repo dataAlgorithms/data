@@ -21,6 +21,7 @@ https://stackoverflow.com/questions/25285855/unresolved-dependencies-error-while
 http://www.infocool.net/kb/Eclipse/201701/280510.html
 
 3. Install sbt on Centos
+http://lancegatlin.org/tech/centos-6-install-sbt
 http://blog.csdn.net/lizhitao/article/details/46846343
 http://blog.csdn.net/zhouyan8603/article/details/49128407
 https://stackoverflow.com/questions/27002423/sbt-build-failed-module-not-found-org-scala-sbtsbt0-13-5
