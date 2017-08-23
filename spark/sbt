@@ -26,3 +26,37 @@ http://lancegatlin.org/tech/centos-6-install-sbt
 http://blog.csdn.net/lizhitao/article/details/46846343
 http://blog.csdn.net/zhouyan8603/article/details/49128407
 https://stackoverflow.com/questions/27002423/sbt-build-failed-module-not-found-org-scala-sbtsbt0-13-5
+
+具体步骤:
+a、下载sbt通用平台压缩包：sbt-0.13.5.tgz
+http://www.scala-sbt.org/download.html
+ 
+b、建立目录，解压文件到所建立目录
+$ sudo tar zxvf sbt-0.13.5.tgz -C /opt/scala/
+ 
+c、建立启动sbt的脚本文件
+
+复制代码
+/*选定一个位置，建立启动sbt的脚本文本文件，如/opt/scala/sbt/ 目录下面新建文件名为sbt的文本文件*/
+$ cd /opt/scala/sbt/
+$ vim sbt
+/*在sbt文本文件中添加 
+SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+java $SBT_OPTS -jar /opt/scala/sbt/bin/sbt-launch.jar "$@" 
+然后按esc键 输入 :wq 保存退出，注意红色字体中的路径是定位到解压的sbt文件包中的sbt-launch.jar文件的绝对路径*/
+
+/×修改sbt文件权限×/
+$ chmod u+x sbt 
+d、配置PATH环境变量，保证在控制台中可以使用sbt命令
+$ vim ~/.bashrc
+/*在文件尾部添加如下代码后，保存退出*/
+export PATH=/opt/scala/sbt/:$PATH
+
+/*使配置文件立刻生效*/
+$ source ~/.bashrc
+e、测试sbt是否安装成功
+
+/*第一次执行时，会下载一些文件包，然后才能正常使用，要确保联网了，安装成功后显示如下*/
+$ sbt sbt-version
+[info] Set current project to sbt (in build file:/opt/scala/sbt/)
+[info] 0.13.5
