@@ -30,7 +30,9 @@ https://stackoverflow.com/questions/27002423/sbt-build-failed-module-not-found-o
 具体步骤:
 a、下载sbt通用平台压缩包：sbt-0.13.5.tgz
 http://www.scala-sbt.org/download.html
- 
+或者
+http://download.openpkg.org/components/cache/sbt/
+
 b、建立目录，解压文件到所建立目录
 $ sudo tar zxvf sbt-0.13.5.tgz -C /opt/scala/
  
