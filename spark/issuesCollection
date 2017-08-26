@@ -44,3 +44,6 @@ Type in expressions to have them evaluated.
 Type :help for more information.
 
 scala> 
+
+3. AttributeError: 'DataFrame' object has no attribute 'map'
+https://stackoverflow.com/questions/39535447/attributeerror-dataframe-object-has-no-attribute-map
