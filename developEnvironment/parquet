@@ -1,0 +1,10 @@
+//https://github.com/apache/parquet-mr
+Parquet-MR contains the java implementation of the Parquet format. 
+Parquet is a columnar storage format for Hadoop; it provides efficient 
+storage and encoding of data. Parquet uses the record shredding and assembly 
+algorithm described in the Dremel paper to represent nested structures.
+
+
+//how-do-i-get-schema-column-names-from-parquet-file
+https://stackoverflow.com/questions/33883640/how-do-i-get-schema-column-names-from-parquet-file
+
