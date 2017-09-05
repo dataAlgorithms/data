@@ -1,0 +1,22 @@
+//Linux下安装maven
+
+1.首先到Maven官网下载安装文件，目前最新版本为3.0.3，下载文件为apache-maven-3.0.3-bin.tar.gz，下载可以使用wget命令；
+
+2.进入下载文件夹，找到下载的文件，运行如下命令解压
+tar -xvf  apache-maven-2.2.1-bin.tar.gz
+
+解压后的文件夹名为apache-maven-3.0.3
+
+3.使用mv命令将apache-maven-3.0.3文件夹拷贝到自己指定的文件夹，比如/usr/local/下
+mv -rf apache-maven-3.0.3 /usr/local/
+
+4.配置环境变量，编辑/etc/profile文件，添加如下代码
+MAVEN_HOME=/usr/local/apache-maven-3.0.3
+export MAVEN_HOME
+export PATH=${PATH}:${MAVEN_HOME}/bin
+
+5.保存文件，并运行如下命令使环境变量生效
+source /etc/profile
+
+6.在控制台输入如下命令，如果能看到Maven相关版本信息，则说明Maven已经安装成功
+mvn -v
