@@ -1,7 +1,3 @@
-Grouping Records Together Based on a Field
-
-dsAlgo_groupRecordBasedOnAField.py
-
 rows = [
     {'address': '5412 N CLARK', 'date': '07/01/2012'},
     {'address': '5148 N CLARK', 'date': '07/04/2012'},
