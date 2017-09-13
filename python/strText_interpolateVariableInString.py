@@ -1,13 +1,5 @@
 In [1]: s = '{name} has {n} messages.'
 
-In [2]: s.format(naem='Guido', n=37)
----------------------------------------------------------------------------
-KeyError                                  Traceback (most recent call last)
-<ipython-input-2-b50cc29cde2a> in <module>()
-----> 1 s.format(naem='Guido', n=37)
-
-KeyError: 'name'
-
 In [3]: s.format(name='Guido', n=37)
 Out[3]: 'Guido has 37 messages.'
 
