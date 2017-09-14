@@ -38,3 +38,12 @@ pymongo_spark.activate()
 airplanes_per_carrier.saveToMongoDB(
   'mongodb://localhost:27017/agile_data_science.airplanes_per_carrier'
 )
+
+
+
+'''
+mongodb check
+
+mongo agile_data_science
+db.airplanes_per_carrier.find()
+'''
