@@ -1,3 +1,11 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.some.config.option", "some-value") \
+.getOrCreate()
+
 # Load the on-time parquet file
 on_time_dataframe = spark.read.parquet('data/on_time_performance.parquet')
 
