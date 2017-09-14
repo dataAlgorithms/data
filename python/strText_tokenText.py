@@ -167,3 +167,8 @@ for tok in generate_tokens(master_pat, 'printer'):
 ## -- End pasted text --
 Token(type='PRINT', value='print')
 Token(type='NAME', value='er')
+
+
+//Advance token
+http://pyparsing.wikispaces.com/
+http://www.dabeaz.com/ply/index.html
