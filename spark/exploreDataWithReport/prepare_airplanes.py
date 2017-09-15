@@ -1,3 +1,11 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .config("spark.some.config.option", "some-value") \
+.getOrCreate()
+
 # Load the FAA N-Number Inquiry Records
 faa_tail_number_inquiry = spark.read.json('data/faa_tail_number_inquiry.jsonl')
 faa_tail_number_inquiry.show()
