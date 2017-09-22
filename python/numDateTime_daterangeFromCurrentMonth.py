@@ -1,3 +1,61 @@
+from datetime import datetime, date, timedelta
+import calendar
+
+def get_month_range(start_date=None):
+    if start_date is None:
+        start_date = date.today().replace(day=1)
+    _,days_in_month = calendar.monthrange(start_date.year, start_date.month)
+    end_date = start_date + timedelta(days=days_in_month)
+    return (start_date, end_date)
+
+a_day = timedelta(days=1)
+first_day, last_day = get_month_range()
+while first_day < last_day:
+    print(first_day)
+    first_day += a_day
+
+//output
+2017-09-01
+2017-09-02
+2017-09-03
+2017-09-04
+2017-09-05
+2017-09-06
+2017-09-07
+2017-09-08
+2017-09-09
+2017-09-10
+2017-09-11
+2017-09-12
+2017-09-13
+2017-09-14
+2017-09-15
+2017-09-16
+2017-09-17
+2017-09-18
+2017-09-19
+2017-09-20
+2017-09-21
+2017-09-22
+2017-09-23
+2017-09-24
+2017-09-25
+2017-09-26
+2017-09-27
+2017-09-28
+2017-09-29
+2017-09-30
+
+def date_range(start, stop, step):
+    while start < stop:
+        yield start
+        start += step
+
+for d in date_range(datetime(2012, 9, 1), datetime(2012, 10, 1),
+                    timedelta(hours=6)):
+    print(d)
+
+//output
 2012-09-01 00:00:00
 2012-09-01 06:00:00
 2012-09-01 12:00:00
