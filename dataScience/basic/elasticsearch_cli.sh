@@ -1,7 +1,7 @@
 1. start elaticsearch
 ./elasticsearch/bin/elasticsearch -Des.insecure.allow.root=true &
 
-2. use elaticsearch
+2. operation on elaticsearch
 //xput
 curl -XPUT 'localhost:9200/agile_data_science?pretty' \
 -H 'Content-Type: application/json' -d'
