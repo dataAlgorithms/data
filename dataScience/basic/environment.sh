@@ -92,6 +92,22 @@ cp mongo-hadoop/spark/src/main/python/pymongo_spark.py lib/
 export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib
 echo 'export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib' >> ~/.bash_profile
 
+异常处理说明：
+gradlew jar执行不了
+
+解决办法：
+So, I changed distributionUrl property in gradle-wrapper.properties(mongo-hadoop/gradle/wrapper/gradle-wrapper.properties) to
+
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=gradle-1.11-bin.zip
+Then, I made a copy of gradle-1.11-bin.zip in gradle/wrapper/.
+
+参考：
+https://stackoverflow.com/questions/22896569/how-to-use-gradle-zip-in-local-system-without-downloading-when-using-gradle-wrap
+
 6. elasticsearch
 下载：
 https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.5/elasticsearch-2.3.5.tar.gz
