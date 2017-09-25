@@ -101,6 +101,13 @@ mv elasticsearch-2.3.5 elasticsearch
 启动：
 elasticsearch/bin/elasticsearch -Des.insecure.allow.root=true
 
+异常处理说明：
+Exception in thread "main" java.lang.RuntimeException: don't run elasticsearch as root.
+方法A: 
+elasticsearch/bin/elasticsearch -Des.insecure.allow.root=true
+方法B：
+https://my.oschina.net/topeagle/blog/591451
+
 7. elaticsearch hadoop
 # Install Elasticsearch for Hadoop
 echo "Installing elasticsearch-hadoop to $PROJECT_HOME/elasticsearch-hadoop ..."
