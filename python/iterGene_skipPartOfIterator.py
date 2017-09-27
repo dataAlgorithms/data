@@ -23,7 +23,7 @@ with open('somefile') as f:
 
 print("\r\n")
 
-# Drop comment lines
+# Drop begin comment lines
 from itertools import dropwhile
 with open('somefile') as f:
     for line in dropwhile(lambda line: line.startswith('#'), f):
@@ -38,7 +38,7 @@ for x in islice(items, 3, None):
 
 print("\r\n")
 
-# Drop comment lines
+# Drop all comment lines
 with open('somefile') as f:
     lines = (line for line in f if not line.startswith('#'))
     for line in lines:
