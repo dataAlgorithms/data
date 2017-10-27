@@ -64,7 +64,11 @@ except ValueError:
 
 '''
 C:\Python27\python.exe D:/dataviz/readWriteJsonFile.py
-[{u'category': u'Physics', u'nationality': u'Swiss', u'sex': u'male', u'name': u'Albert Einstein', u'year': 1921}, {u'category': u'Physics', u'nationality': u'British', u'sex': u'male', u'name': u'Paul Dirac', u'year': 1933}, {u'category': u'Chemistry', u'nationality': u'Polish', u'sex': u'female', u'name': u'Marie Curie', u'year': 1911}]
+[{u'category': u'Physics', u'nationality': u'Swiss', u'sex': u'male', u'name': u'Albert Einstein', u'year': 1921}, 
+{u'category': u'Physics', u'nationality': u'British', u'sex': u'male', u'name': u'Paul Dirac', u'year': 1933}, 
+{u'category': u'Chemistry', u'nationality': u'Polish', u'sex': u'female', u'name': u'Marie Curie', u'year': 1911}]
+
 {"time": "2017-10-27T15:19:41.642000"}
+
 Oops! - invalid date '2012/01/01 12:32:111'
 '''
