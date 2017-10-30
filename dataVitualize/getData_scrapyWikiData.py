@@ -15,7 +15,7 @@ def get_Nobel_soup():
 
 soup = get_Nobel_soup()
 soup.find('table', {'class':'wikitable sortable'})
-soup.find('table': {'class':'sortable wikitable'})
+soup.find('table', {'class':'sortable wikitable'})
 soup.select('table.sortable.wikitable')
 
 table = soup.select_one('table.sortable.wikitable')
