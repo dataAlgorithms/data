@@ -1,0 +1,54 @@
+gzip -d 070020c3g8_FVSS_STREAM_20170802133000.log.gz 
+python logTocsv.py 
+bzip2 -z 070020c3g8_FVSS_STREAM_20170802133000.log.csv
+
+###############final file
+070020c3g8_FVSS_STREAM_20170802133000.log.csv.bz2
+
+###############primary file
+cat 070020c3g8_FVSS_STREAM_20170802133000.log.gz 
+1501651796	300	rtmp://lxlive1.mengliaoba.cn	0	0	0	0	95659201	18	73
+1501651796	300	rtmp://edum.jcx999.com	0	0	0	0	131778936	4	0
+1501651796	300	rtmp://rtmp.phgse.cn	0	0	0	0	15730419	1	0
+1501651796	300	rtmp://v.hhkcdn.com	0	0	0	0	28075940	2	3
+1501651796	300	rtmp://agqj.yzbabyu.com	0	0	0	0	216095338	10	41
+1501651796	300	rtmp://play2.fqcj.tv	0	0	0	0	511815345	48	32
+1501651796	300	rtmp://ftv.sun0769.com	0	0	0	0	3165	4	36
+1501651797	300	rtmp://ptvlivef.people.com.cn	0	0	0	0	1875167027	16	2
+1501651796	300	rtmp://getlive.haibian.com	0	0	0	0	92402048	11	1
+1501651796	300	rtmp://lives1.yj81.com	0	0	0	0	62560635	3	1
+1501651796	300	rtmp://zb.kangfuxigu.com	0	0	0	0	23747926	1	0
+1501651796	300	rtmp://lxrtmp1.mengliaoba.cn	0	0	0	0	2322508	0	10
+1501651736	300	rtmp://ldr-doc-cdn-cncache-a937fumzq6s5.iowiuhwer37asdan.net	0	0	0	0	52081	0	0
+
+###############python file
+#!/usr/bin/python
+
+import re
+import csv
+
+def logToCsv(csvFile):
+
+    # read all contents
+    with open(csvFile) as f:
+        allLines = f.readlines()
+        print('allLines:', allLines)
+
+    # store all line into tuple list
+    headers = ['timestamp', 'url', 'bytes']
+    rows = []
+    for line in allLines:
+        lines = re.split("\s+", line)
+        rows.append((lines[0], lines[2], lines[7]))
+
+    print('rows:', rows)
+
+    with open('%s.csv' % csvFile, 'w') as f:
+        f_csv = csv.writer(f)
+        f_csv.writerow(headers)
+        f_csv.writerows(rows)
+
+if __name__ == "__main__":
+    csvFile = "070020c3g8_FVSS_STREAM_20170802133000.log"
+    logToCsv(csvFile)
+
