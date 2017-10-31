@@ -165,6 +165,9 @@ PATH=$PATH:$HOME/bin
 export PROJECT_HOME=/root/workspace
 
 # python
+rpm -qa|grep python|xargs rpm -e --allmatches --nodeps
+ln -fs /root/workspace/anaconda/bin/py /usr/bin/python
+ 
 export PATH="$HOME/anaconda/bin:$PATH"
 export PYTHONPATH=$PYTHONPATH:$PROJECT_HOME/lib
 
