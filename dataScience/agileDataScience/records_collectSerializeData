@@ -1,0 +1,10 @@
+数据收集或者采集的方法
+
+1. 从某个网站直接下载
+适合： 政府类公开的数据 （比如： 航班历史数据）
+技术： wget
+      使用： wget -P data http://s3.amazonaws.com/agile_data_science/On_Time_On_Time_Performance_2015.csv.bz2
+
+2. 使用爬虫到网站去爬
+适合： 无法直接获取
+技术： python requests + beautifulSoup4 或者python scrapy
