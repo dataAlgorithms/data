@@ -1,3 +1,5 @@
+#coding=utf-8
+'''
 数据收集或者采集的方法
 
 1. 从某个网站直接下载
@@ -8,3 +10,11 @@
 2. 使用爬虫到网站去爬
 适合： 无法直接获取
 技术： python requests + beautifulSoup4 或者python scrapy
+'''
+
+# download the flight data
+import wget # pip install wget (https://pypi.python.org/pypi/wget/)
+url = "http://s3.amazonaws.com/agile_data_science/On_Time_On_Time_Performance_2015.csv.bz2"
+filename = wget.download(url, bar=bar_thermometer)
+print(filename)
+
