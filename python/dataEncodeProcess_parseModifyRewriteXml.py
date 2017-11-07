@@ -31,10 +31,10 @@ from xml.etree.ElementTree import parse, Element
 
 doc = parse('pred.xml')
 root = doc.getroot()
-print(roow)
+print(root)
 
 # remove a few elements
-root.remove(root.find('sci'))
+root.remove(root.find('sri'))
 root.remove(root.find('cr'))
 
 # insert a new element after <nm>...</nm>
@@ -43,7 +43,7 @@ print('index', index)
 
 e = Element('spam')
 e.text = 'This is a test'
-root.indert(inex+1, e)
+root.insert(index+1, e)
 
 # write back to a file
 doc.write('newpred.xml', xml_declaration=True)
