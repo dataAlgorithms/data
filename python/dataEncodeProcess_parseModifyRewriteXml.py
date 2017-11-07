@@ -49,6 +49,8 @@ root.indert(inex+1, e)
 doc.write('newpred.xml', xml_declaration=True)
 
 '''
+cat newpred.xml
+
 <?xml version='1.0' encoding='us-ascii'?>
 <stop>
     <id>14791</id>
