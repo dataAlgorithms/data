@@ -52,9 +52,46 @@ def read_polys(filename):
             polys.append(poly)
     return polys
 
+import struct
+
+class StructField:
+    '''
+    Descriptor representing a simple structure field
+    '''
+    def __init__(self, format, offset):
+        self.format = format
+        self.offset = offset
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        else:
+            r = struct.unpack_from(self.format,
+                  instance._buffer, self.offset)
+            return r[0] if len(r) == 1 else r
+
+class Structure:
+    def __init__(self, bytedata):
+        self._buffer = memoryview(bytedata)
+
+class PolyHeader(Structure):
+    file_code = StructField('<i', 0)
+    min_x = StructField('<d', 4)
+    min_y = StructField('<d', 12)
+    max_x = StructField('<d', 20)
+    max_y = StructField('<d', 28)
+    num_polys = StructField('<i', 36)
+
+
+
 '''
 "D:\Program Files\Anaconda3\python.exe" D:/dataviz/pytest/readNestedVariableSizeBinaryStruct.py
 [[(1.0, 2.5), (3.5, 4.0), (2.5, 1.5)], [(7.0, 1.2), (5.1, 3.0), (0.5, 7.5), (0.8, 9.0)], [(3.4, 6.3), (1.2, 0.5), (4.6, 9.2)]]
+True
+0.5
+9.2
+7.0
+9.2
+3
 
 Process finished with exit code 0
 
@@ -66,4 +103,14 @@ if __name__ == "__main__":
     # read data
     polys = read_polys('polys.bin')
     print(polys)
+
+    f = open('polys.bin', 'rb')
+    phead = PolyHeader(f.read(40))
+    print(phead.file_code == 0x1234)
+    print(phead.min_x)
+    print(phead.min_y)
+    print(phead.max_x)
+    print(phead.max_y)
+    print(phead.num_polys)
+
 
