@@ -387,21 +387,71 @@ class PolyHeader(Structure):
         ('i', 'num_polys')
     ]
 
+class SizedRecord:
+    def __init__(self, bytedata):
+        self._buffer = memoryview(bytedata)
 
+    @classmethod
+    def from_file(cls, f, size_fmt, includes_size=True):
+        sz_nbytes = struct.calcsize(size_fmt)
+        sz_bytes = f.read(sz_nbytes)
+        sz, = struct.unpack(size_fmt, sz_bytes)
+        buf = f.read(sz - includes_size * sz_nbytes)
+        return cls(buf)
+
+    def iter_as(self, code):
+        if isinstance(code, str):
+            s = struct.Struct(code)
+            for off in range(0, len(self._buffer), s.size):
+                yield s.unpack_from(self._buffer, off)
+        elif isinstance(code, StructureMeta):
+            size = code.struct_size
+            for off in range(0, len(self._buffer), size):
+                data = self._buffer[off:off+size]
+                yield code(data)
 
 
 '''
 "D:\Program Files\Anaconda3\python.exe" D:/dataviz/pytest/readNestedVariableSizeBinaryStructNest.py
 [[(1.0, 2.5), (3.5, 4.0), (2.5, 1.5)], [(7.0, 1.2), (5.1, 3.0), (0.5, 7.5), (0.8, 9.0)], [(3.4, 6.3), (1.2, 0.5), (4.6, 9.2)]]
 True
-<__main__.Point object at 0x0000000000BAB048>
+<__main__.Point object at 0x0000000001129400>
 0.5
 9.2
 7.0
 9.2
 3
+3
+[<__main__.SizedRecord object at 0x0000000001129400>, <__main__.SizedRecord object at 0x0000000001129390>, <__main__.SizedRecord object at 0x0000000001129438>]
+Polygon 0
+(1.0, 2.5)
+(3.5, 4.0)
+(2.5, 1.5)
+Polygon 1
+(7.0, 1.2)
+(5.1, 3.0)
+(0.5, 7.5)
+(0.8, 9.0)
+Polygon 2
+(3.4, 6.3)
+(1.2, 0.5)
+(4.6, 9.2)
+Polygon 0
+1.0 2.5
+3.5 4.0
+2.5 1.5
+Polygon 1
+7.0 1.2
+5.1 3.0
+0.5 7.5
+0.8 9.0
+Polygon 2
+3.4 6.3
+1.2 0.5
+4.6 9.2
 
 Process finished with exit code 0
+
 
 
 '''
@@ -422,5 +472,22 @@ if __name__ == "__main__":
     print(phead.max.x)
     print(phead.max.y)
     print(phead.num_polys)
+
+    f = open('polys.bin', 'rb')
+    phead = PolyHeader.from_file(f)
+    print(phead.num_polys)
+    polydata = [SizedRecord.from_file(f, '<i')
+                for n in range(phead.num_polys)]
+    print(polydata)
+
+    for n, poly in enumerate(polydata):
+        print('Polygon', n)
+        for p in poly.iter_as('<dd'):
+            print(p)
+
+    for n, poly in enumerate(polydata):
+        print('Polygon', n)
+        for p in poly.iter_as(Point):
+            print(p.x, p.y)
 
 
