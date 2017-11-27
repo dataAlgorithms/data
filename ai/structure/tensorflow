@@ -1,0 +1,12 @@
+1. install
+a. 安装好anaconda3
+b. conda create -n tensorflow python=3.5
+c. activate
+activate tensorflow
+pip install --upgrade --ignore-installed tensorflow (cpu版本）
+或
+pip install tensorflow-gpu （gpu版本， 要求cude8环境）
+d. deactivate
+e. 测试
+import tensorflow as tf
+print(tf.__version__)
