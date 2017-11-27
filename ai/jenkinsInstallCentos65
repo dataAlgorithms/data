@@ -1,0 +1,99 @@
+//安装java
+1.查看Linux自带的JDK是否已安装
+java –version  
+如果出现openjdk，最好还是先卸载掉openjdk,在安装sun公司的jdk.
+
+2.查看jdk信息
+rpm -qa|grep java  
+
+3.卸载OpenJDK，执行以下操作：
+rpm -e --nodeps tzdata-java-2012c-1.el6.noarch  
+rpm -e --nodeps java-1.7.0-openjdk-1.7.0.45-1.45.1.11.1.el6.x86_64  
+
+4.新建java安装目录
+mkdir /usr/java  
+
+5.将之前下载的jdk解压缩并安装
+tar -zxvf  jdk-7u71-linux-i586.tar.gz  
+
+6.在profile文件中加入java环境变量
+vi /etc/profile  
+  
+export JAVA_HOME=/usr/java/jdk1.7.0_71  
+export CLASSPATH=.:%JAVA_HOME%/lib/dt.jar:%JAVA_HOME%/lib/tools.jar  
+export PATH=$PATH:$JAVA_HOME/bin  
+
+7.使文件立即生效
+source /etc/profile     //或者reboot  
+
+8.检测是否安装成功
+java -version  
+
+//添加Jenkins库到yum库
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key 
+
+//安装jenkins
+yum install jenkins
+
+安装成功后Jenkins将作为一个守护进程随系统启动
+系统会创建一个“jenkins”用户来允许这个服务，如果改变服务所有者，同时需要修改/var/log/jenkins, /var/lib/jenkins, 和/var/cache/jenkins的所有者
+启动的时候将从/etc/sysconfig/jenkins获取配置参数
+默认情况下，Jenkins运行在8080端口，在浏览器中直接访问该端进行服务配置
+Jenkins的RPM仓库配置被加到/etc/yum.repos.d/jenkins.repo
+
+//jenkins添加java依赖
+ vim /etc/init.d/jenkins
+
+在candidates中第一行添加java路径，如下：
+
+candidates="
+/opt/soft/jdk1.8.0_60/bin/java
+/etc/alternatives/java
+/usr/lib/jvm/java-1.6.0/bin/java
+/usr/lib/jvm/jre-1.6.0/bin/java
+/usr/lib/jvm/java-1.7.0/bin/java
+/usr/lib/jvm/jre-1.7.0/bin/java
+/usr/lib/jvm/java-1.8.0/bin/java
+/usr/lib/jvm/jre-1.8.0/bin/java
+/usr/bin/java
+"
+
+//修改防火墙
+修改防火墙允许8080端口访问
+
+vim /etc/sysconfig/iptables
+
+加入:
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT
+
+service iptables restart
+
+//启动jenkins
+[root@elk bin]# service  jenkins restart
+Shutting down Jenkins                                      [  OK  ]
+Starting Jenkins                                           [  OK  ]
+
+//安装git
+yum install git
+
+//安装maven
+wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+tar zxvf apache-maven-3.3.9-bin.tar.gz
+
+vim /etc/profile
+
+export MAVEN_HOME=/root/apache-maven-3.3.9
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
+source /etc/profile
+
+mvn -v
+
+在Jenkins中配置好
+系统管理/全局工具配置/新增Maven
+
+在Jenkins中配置好
+系统管理/全局工具配置/新增Jdk
+
+
+
