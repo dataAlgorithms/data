@@ -1,0 +1,33 @@
+一、安装jdk
+
+1.查看Linux自带的JDK是否已安装
+java –version  
+如果出现openjdk，最好还是先卸载掉openjdk,在安装sun公司的jdk.
+
+2.查看jdk信息
+[plain] view plain copy
+rpm -qa|grep java  
+
+3.卸载OpenJDK，执行以下操作：
+[plain] view plain copy
+rpm -e --nodeps tzdata-java-2012c-1.el6.noarch  
+rpm -e --nodeps java-1.7.0-openjdk-1.7.0.45-1.45.1.11.1.el6.x86_64  
+
+4.新建java安装目录
+mkdir /usr/java  
+
+5.将之前下载的jdk解压缩并安装
+tar -zxvf  jdk-7u71-linux-i586.tar.gz  
+
+6.在profile文件中加入java环境变量
+vi /etc/profile  
+  
+export JAVA_HOME=/usr/java/jdk1.7.0_71  
+export CLASSPATH=.:%JAVA_HOME%/lib/dt.jar:%JAVA_HOME%/lib/tools.jar  
+export PATH=$PATH:$JAVA_HOME/bin  
+
+7.使文件立即生效
+source /etc/profile     //或者reboot  
+
+8.检测是否安装成功
+java -version  
