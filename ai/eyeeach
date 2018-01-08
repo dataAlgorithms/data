@@ -6,3 +6,192 @@ https://github.com/facebookresearch/wav2letter
 
 动物脸部识别
 http://web.cs.ucdavis.edu/~yjlee/projects/interspecies_cvpr2017.pdf
+
+No.1
+FastText：快速文本表示/分类库，来自 Facebook（GitHub 11,786 stars）
+
+链接：https://github.com/facebookresearch/fastText
+
+参考内容：Facebook发布新版fastText：拓展至移动端，加入教程
+
+又及 Muse：多语言无监督/监督词嵌入，基于 FastText（GitHub 695 stars）
+
+链接：https://github.com/facebookresearch/MUSE
+
+No.2
+Deep-photo-styletransfer：康奈尔大学 Fujun Luan 论文《Deep Photo Style Transfer》的代码与数据（GitHub 9747 stars）
+
+链接：https://github.com/luanfujun/deep-photo-styletransfer
+
+No.3
+face recognition：最简单的 Python 命令行面部识别 API，来自 Adam Geitgey（GitHub 8672 stars）
+
+链接：https://github.com/ageitgey/face_recognition
+
+参考内容：基于Python的开源人脸识别库：离线识别率高达99.38%
+
+No.4
+Magenta：机器智能音乐与艺术生成器（GitHub 8113 stars）
+
+链接：https://github.com/tensorflow/magenta
+
+参考内容：谷歌Magenta项目是如何教神经网络编写音乐的？
+
+No.5
+Sonnet：基于 TensorFlow 的神经网络库（GitHub 5731 stars），来自 DeepMind 成员 Malcolm Reynolds
+
+链接：https://github.com/deepmind/sonnet
+
+参考内容：DeepMind开源Sonnet：可在TensorFlow中快速构建神经网络
+
+No.6
+deeplearn.js：来自 Google Brain 团队 Nikhil Thorat 的网页端硬件加速机器学习库（GitHub 5462 stars）
+
+链接：https://github.com/PAIR-code/deeplearnjs
+
+参考内容：谷歌开源DeepLearn.js：可在网页上实现硬件加速的机器学习
+
+No.7
+Fast Style Transfer：TensorFlow 快速风格转换，来自 MIT 的 Logan Engstrom（GitHub 4843 stars）
+
+链接：https://github.com/lengstrom/fast-style-transfer
+
+No.8
+Pysc2：星际争霸 2 学习环境，来自 DeepMind Timo Ewalds 等人（GitHub 3683 stars）
+
+链接：https://github.com/deepmind/pysc2
+
+No.9
+AirSim：基于虚幻引擎的开源自动驾驶模拟器，由微软研究院 Shital Shah 等人提出（GitHub 3861 stars）
+
+链接：https://github.com/Microsoft/AirSim
+
+No.10
+Facets：机器学习数据集可视化工具，来自 Google Brain（GitHub 3371 stars）
+
+链接：https://github.com/PAIR-code/facets
+
+参考内容：谷歌开源机器学习可视化工具 Facets：从全新角度观察数据
+
+No.11
+Style2Paints：AI 漫画线稿上色工具，来自苏州大学（GitHub 3310 stars）
+
+链接：https://github.com/lllyasviel/style2paints
+
+参考内容：Style2paints：专业的AI漫画线稿自动上色工具
+
+No.12
+Tensor2Tensor：用于广义序列-序列模型的工具库，来自 Google Brain 的 Ryan Sepassi（GitHub 3087 stars）
+
+链接：https://github.com/tensorflow/tensor2tensor
+
+参考内容：一个模型库学习所有：谷歌开源模块化深度学习系统Tensor2Tensor
+
+No.13
+CycleGAN and pix2pix in PyTorch：基于 PyTorch 的图像-图像转换工具，来自 UC Berkeley 在读博士朱俊彦（GitHub 2847 stars）
+
+链接：https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
+
+参考内容：你来手绘涂鸦，人工智能生成「猫片」：edges2cats图像转换详解
+
+No.14
+Faiss：用密集向量高效相似性搜索与聚类的工具库，来自 Facebook（GitHub 2629 stars）
+
+链接：https://github.com/facebookresearch/faiss
+
+No.15
+Fashion-mnist：一个类似于 MNIST 的时尚产品数据集，来自 Zalando Tech 的 Han Xiao（GitHub 2780 stars）
+
+链接：https://github.com/zalandoresearch/fashion-mnist
+
+No. 16
+ParlAI：用于在各种公开可用的对话数据集上训练与评估 AI 模型的框架，来自 Facebook 的 Alexander Miller（GitHub 2578 stars）
+
+链接：https://github.com/facebookresearch/ParlAI
+
+参考内容：Facebook开源人工智能框架ParlAI：可轻松训练评估对话模型
+
+No.17
+Fairseq：来自 FAIR 的序列到序列工具包（GitHub 2571 stars）
+
+链接：https://github.com/facebookresearch/fairseq
+
+参考内容：Facebook提出全新CNN机器翻译：准确度超越谷歌而且还快九倍（已开源）
+
+No.18
+Pyro：使用 Python 和 PyTorch 进行深度通用概率编程，来自 Uber AI Labs（GitHub 2387 stars）
+
+链接：https://github.com/uber/pyro
+
+参考内容：Uber与斯坦福大学开源深度概率编程语言Pyro：基于PyTorch
+
+No.19
+iGAN：基于 GAN 的交互图像生成器（GitHub 2369 stars）
+
+链接：https://github.com/junyanz/iGAN
+
+参考内容：伯克利大学和Adobe开源深度学习图像编辑工具 iGAN
+
+No.20
+Deep-image-prior：使用神经网络进行图像恢复，同时无需学习过程，来自 Skoltech 的 Dmitry Ulyanov（GitHub 2188 stars）
+
+链接：https://github.com/DmitryUlyanov/deep-image-prior
+
+No.21
+Face classification：基于 Keras CNN 模型与 OpenCV 的实时面部检测和表情/性别分类，训练与 fer2013/imdb 数据集（GitHub 1967 stars）
+
+链接：https://github.com/oarriaga/face_classification
+
+No.22
+Speech to Text WaveNet：使用 DeepMind 的 WaveNet 和 TensorFlow 构成的端到端句级英语语音识别，来自 Kakao Brain 的 Namju Kim（GitHub 1961 stars）
+
+链接：https://github.com/buriburisuri/speech-to-text-wavenet
+
+参考内容：DeepMind WaveNet，将机器合成语音水平与人类差距缩小50%
+
+No.23
+StarGAN：用于多领域图像-图像转换的统一生成对抗网络（GitHub 1954 stars）
+
+链接：https://github.com/yunjey/StarGAN
+
+No.24
+MI-agents：Unity 机器学习智能体，来自 Unity3D 的 Arthur Juliani（GitHub 1658 stars）
+
+链接：https://github.com/Unity-Technologies/ml-agents
+
+No.25
+Deep Video Analytics：分布式可视化搜索和可视化数据分析平台，来自康奈尔大学的 Akshay Bhat（GitHub 1494 stars）
+
+链接：https://github.com/AKSHAYUBHAT/DeepVideoAnalytics
+
+No.26
+OpenNMT：Torch 上的开源神经机器翻译（GitHub 1490 stars）
+
+链接：https://github.com/OpenNMT/OpenNMT
+
+参考内容：哈佛大学NLP组开源神经机器翻译工具包OpenNMT：已达到生产可用水平
+
+No.27
+Pix2PixHD：使用条件 GAN 合成和处理 2048×1024 分辨率的图像，来自英伟达 AI 科学家 Ming-Yu Liu（GitHub 1283 stars）
+
+链接：https://github.com/NVIDIA/pix2pixHD
+
+No.28
+Horovod：分布式 TensorFlow 训练框架，来自 Uber 工程团队（GitHub 1188 stars）
+
+链接：https://github.com/uber/horovod
+
+参考内容：详解Horovod：Uber开源的TensorFlow分布式深度学习框架
+
+No.29
+AI-Blocks：强大而直观的 WYSIWYG 界面，可让任何人创建机器学习模型（GitHub 899 stars）
+
+链接：https://github.com/MrNothing/AI-Blocks
+
+No.30
+Voice Conversion with Non-Parallel Data：基于 TensorFlow 的深度神经网络语音转换（语音风格转换），来自 Kakao Brain 团队的 Dabi Ahn（GitHub 845 stars）
+
+链接：https://github.com/andabi/deep-voice-conversion 
+
+原文链接：https://medium.mybridge.co/30-amazing-machine-learning-projects-for-the-past-year-v-2018-b853b8621ac7
+
