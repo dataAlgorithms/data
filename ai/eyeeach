@@ -195,3 +195,7 @@ Voice Conversion with Non-Parallel Data：基于 TensorFlow 的深度神经网�
 
 原文链接：https://medium.mybridge.co/30-amazing-machine-learning-projects-for-the-past-year-v-2018-b853b8621ac7
 
+N0. 31
+利用神经网络，自动把设计稿变成HTML代码。
+https://github.com/emilwallner/Screenshot-to-code-in-Keras
+
